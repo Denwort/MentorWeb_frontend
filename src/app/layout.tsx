@@ -20,7 +20,7 @@ const RootLayout = () => {
         <Header />
         
         <main>
-          
+          <Registro/>
         </main>
 
       </body>
