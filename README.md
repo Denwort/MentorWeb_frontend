@@ -1,4 +1,4 @@
-### Inicializacion
+# Inicializacion
 
 ## Para correr la pagina web abre la terminal y pon lo siguiente:
 
@@ -11,20 +11,20 @@ npm run dev
 
 Abre [http://localhost:3000](http://localhost:3000) en el navegador para ver la pag web
 
-### Paginacion
+# Paginacion
 
 Para crear una pag nueva [http://localhost:3000/algo](http://localhost:3000/algo):
 
 ## 1. Crea una carpeta con el nombre 
 
-** Ejemplo: **
+**Ejemplo:**
 ### Queremos crear la pagina de login
 
 src/app/login
 
 ### 2. Crea un archivo page.js dentro de la carpeta
 
-** Ejemplo: **
+**Ejemplo:**
 
 src/app/login/page.js
 
