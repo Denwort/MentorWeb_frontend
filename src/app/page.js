@@ -1,9 +1,13 @@
-import RootLayout from "./layout";
+import Layout from "./layout";
 
-
-export default function Home() {
+const Home = () => {
   return (
-    <RootLayout></RootLayout>
-    
-  )
-}
+    <main>
+      <div>
+        <h1>holaaaaa</h1>
+      </div>
+    </main>
+  );
+};
+
+export default Home;

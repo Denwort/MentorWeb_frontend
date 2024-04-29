@@ -1,7 +1,8 @@
-import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from "./Header";
+import MentorWebIco from "./MentorWebIco.png";
 import Image from "next/image";
+
+
 
 export const metadata = {
   title: "MentorWeb",
@@ -9,10 +10,18 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+
   return (
-    <html lang="en">
-      <Header></Header>
-      <body className="bg-customPink">{children}</body>
-    </html>
-  );
+      <html lang="en">
+        <body className="bg-customPink">
+          <header className="bg-white">
+            <div className="grid grid-cols-2 p-8  w-1/6">
+              <Image src={MentorWebIco} alt="MentorWeb Icon" width={50} height={50} />
+              <h1 className="pt-3">MentorWeb</h1> 
+            </div>
+          </header>
+          {children}
+        </body>
+      </html>
+  )
 }
