@@ -18,11 +18,11 @@ Para crear una pag nueva [http://localhost:3000/algo](http://localhost:3000/algo
 ## 1. Crea una carpeta con el nombre 
 
 **Ejemplo:**
-### Queremos crear la pagina de login
+#### Queremos crear la pagina de login
 
 src/app/login
 
-### 2. Crea un archivo page.js dentro de la carpeta
+#### 2. Crea un archivo page.js dentro de la carpeta
 
 **Ejemplo:**
 
