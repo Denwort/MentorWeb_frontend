@@ -1,6 +1,5 @@
 'use client'
 import React, { useState } from 'react';
-import { useMiProvider } from './../../context/context.js';
 import { useRouter } from 'next/navigation.js';
 
 export default function Home() {
@@ -11,7 +10,9 @@ export default function Home() {
   const [name, setName] = useState('');
   const [usuario, setUsuario] = useState('');
   const [password, setPassword] = useState('');
-  const [cuenta, setCuenta] = useMiProvider();
+
+  const [errors, setErrors] = useState({});
+  const [hasError, setHasError] = useState(0);
 
 
   const handleSignUp = async () => {
@@ -31,18 +32,55 @@ export default function Home() {
       
       if (response.ok) {
         const data = await response.json();
-        if (data.tipo==1 || data.tipo==2 || data.tipo==3){
-          router.push('/login')
+
+        if(hasError==0){
+          if (data.tipo!=0){
+            router.push('/login')
+          }else{
+            alert(data.mensaje);
+          }
         }else{
-          alert(data.mensaje);
+          alert("no")
         }
       } 
 
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
     }
-  }
+  };
+
   
+  const validatePassword = (value) => {
+    const errors = {};
+
+    if (!/(?=.*[A-Z])/.test(value)) {
+      errors.uppercase = 'Debe contener al menos una mayúscula';
+    }
+
+    if (!/(?=.*[!@#$%^&*])/.test(value)) {
+      errors.specialChar = 'Debe contener al menos un carácter especial';
+    }
+
+    if (!/(?=.*\d)/.test(value)) {
+      errors.number = 'Debe contener al menos un número';
+    }
+
+    return errors;
+  };
+
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+    setPassword(value);
+    const newErrors = validatePassword(value);
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      setHasError(1);
+    } else {
+      setHasError(0);
+    }
+  };
+
   return (
     <main className="flex justify-center items-center  pt-8 ">
       <div className="grid grid-row-2 gap-2 w-2/3">
@@ -81,13 +119,21 @@ export default function Home() {
           </div>
 
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm mb-4" >
-              Password
-            </label>
-            <div className="flex items-center justify-center">
-            <input className="border rounded-full w-11/12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************" value={password} onChange={(e) => setPassword(e.target.value)}/>
-            </div>
-          </div>
+                <label className="block text-gray-700 text-sm mb-4">Password</label>
+                <div className="flex items-center justify-center">
+                  <input
+                    className="border rounded-full w-11/12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="password"
+                    type="password"
+                    placeholder="******************"
+                    value={password}
+                    onChange={handlePasswordChange}
+                  />
+                </div>
+                {errors.uppercase && <p className="text-red-500">{errors.uppercase}</p>}
+                {errors.specialChar && <p className="text-red-500">{errors.specialChar}</p>}
+                {errors.number && <p className="text-red-500">{errors.number}</p>}
+              </div>
 
           <div className="flex items-center justify-center">
             <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline" type="button" onClick={handleSignUp}>
