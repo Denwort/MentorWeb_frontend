@@ -1,46 +1,83 @@
+'use client'
+import React, { useState } from 'react';
+import { useMiProvider } from './../../context/context.js'
 
 export default function Home() {
+
+  const [usuario, setUsuario] = useState('');
+  const [password, setPassword] = useState('');
+  const [cuenta, setCuenta] = useMiProvider();
+
+
+  const handleLogin = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/autenticacion/login/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "usuario":usuario,
+          "contrasenha":password,
+        }),
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        if(data.tipo==1 || data.tipo==2 || data.tipo==3){
+          console.log(data)
+          setCuenta(data);
+        }else{
+          alert(data.mensaje);
+        }
+      } 
+
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+    }
+  }
+
   return (
-    <main className="flex justify-center items-center  pt-8 ">
-      <div className="grid grid-row-2 gap-2 w-2/3">
-          <div class="w-full"><h1 class="font-bold ">Login</h1></div>
+      <main className="flex justify-center items-center  pt-8 ">
+        <div className="grid grid-row-2 gap-2 w-2/3">
+            <div className="w-full"><h1 className="font-bold ">Login</h1></div>
 
-      <div class=" px-4 py-1 mt-2">
-        <form class="bg-white shadow-md ">
+        <div className=" px-4 py-1 mt-2">
+          <form className="bg-white shadow-md ">
 
-          <div className="grid grid-row-4 px-48 py-32">
+            <div className="grid grid-row-4 px-48 py-32">
 
-          <div class="mb-6">
-            <label class="block text-gray-700 text-sm mb-4" for="email">
-              Email
-            </label>
-            <div className="flex items-center justify-center">
-            <input class="border rounded-full w-11/12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Email"/>
+            <div className="mb-6">
+              <label className="block text-gray-700 text-sm mb-4" >
+                Usuario
+              </label>
+              <div className="flex items-center justify-center">
+              <input className="border rounded-full w-11/12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="Usuario" type="Usuario" placeholder="Usuario" value={usuario} onChange={(e) => setUsuario(e.target.value)}/>
+              </div>
             </div>
-          </div>
 
-          <div class="mb-6">
-            <label class="block text-gray-700 text-sm mb-4" for="password">
-              Password
-            </label>
-            <div className="flex items-center justify-center">
-            <input class="border rounded-full w-11/12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************"/>
+            <div className="mb-6">
+              <label className="block text-gray-700 text-sm mb-4">
+                Password
+              </label>
+              <div className="flex items-center justify-center">
+              <input className="border rounded-full w-11/12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************" value={password} onChange={(e) => setPassword(e.target.value)}/>
+              </div>
             </div>
-          </div>
 
-          <div class="flex items-center justify-center">
-            <button class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline" type="button">
-              LogIn
-            </button>
-          </div>
-          
-          </div>
+            <div className="flex items-center justify-center">
+              <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline" type="button" onClick={handleLogin}>
+                LogIn
+              </button>
+            </div>
+            
+            </div>
 
-        </form>
-      </div>  
+          </form>
+        </div>  
 
-      </div>
-    </main>
+        </div>
+      </main>
     
-  )
-}
+    )
+  }

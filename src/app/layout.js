@@ -1,6 +1,8 @@
+
 import "./globals.css";
 import MentorWebIco from "./MentorWebIco.png";
 import Image from "next/image";
+import { MiProvider } from './../context/context.js'
 
 
 
@@ -12,6 +14,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
 
   return (
+    <MiProvider>
       <html lang="en">
         <body className="bg-customPink">
           <header className="bg-white">
@@ -23,5 +26,6 @@ export default function RootLayout({ children }) {
           {children}
         </body>
       </html>
+    </MiProvider>
   )
 }
