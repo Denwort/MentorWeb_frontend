@@ -1,11 +1,11 @@
 import Image from "next/image";
 export default function Home() {
     return (
-      <main className="flex justify-center items-center  pt-8 ">
+      <main className="flex justify-center items-center pt-8">
         <div className="grid grid-row-2 gap-2 w-2/3">
             <div className="grid grid-row-3 gap-2">
                 <div className="row-start-1 flex items-center justify-center">
-                    <div className="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center">
+                    <div className="w-24 h-24 bg-blue-500 rounded-full flex items-center justify-center">
                         <p className="text-white font-bold text-lg">Imagen</p>
                     </div>
                 </div>
@@ -20,12 +20,12 @@ export default function Home() {
                 <div className="row-start-3 flex items-center justify-center"> 
                     <div className="grid grid-cols-2 gap-2">
                         <div className="col-start-1 flex items-center justify-center">
-                            <div className="w-20 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                            <div className="px-6  h-10 bg-green-500 rounded-full flex items-center justify-center">
                                 <p className="text-white font-bold">Gest. Ope.</p>
                             </div>
                         </div>
                         <div className="col-start-2 flex items-center justify-center">
-                            <div className="px-8 w-20 h-10 bg-yellow-500 rounded-full flex items-center justify-center">
+                            <div className="px-6  h-10 bg-yellow-500 rounded-full flex items-center justify-center">
                                 <p className="text-white font-bold">Simulacion</p>
                             </div>
                         </div>
