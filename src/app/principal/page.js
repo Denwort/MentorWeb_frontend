@@ -1,6 +1,5 @@
 import MentorWebIco from "./../MentorWebIco.png";
 import Image from "next/image";
-import { useMiProvider } from './../../context/context.js'
 
 export const metadata = {
   title: "MentorWeb",
@@ -9,15 +8,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <useMiProvider>
       <html lang="en">
         <body className="bg-customPink">
-          <header className="bg-white p-8">
-            <div className="flex items-center">
-              <Image src={MentorWebIco} alt="MentorWeb Icon" width={50} height={50} />
-              <h1 className="pt-3 ml-3">MentorWeb</h1>
-            </div>
-          </header>
           <div className="flex h-screen">
             <div className="w-48 bg-gray-200 p-4">
               <h2>Menú</h2>
@@ -65,6 +57,5 @@ export default function RootLayout({ children }) {
           </div>
         </body>
       </html>
-    </useMiProvider>
   )
 }
