@@ -12,8 +12,7 @@ export default function Reservas() {
       <html lang="en">
         <body className="bg-customPink">
           <div className="flex h-screen">
-            <div className="w-48 bg-gray-200 p-4">
-              <h2>Menú</h2>
+            <div className="w-48 bg-gray-200 p-10">
               <ul>
                 <li style={{ marginTop: '10px' }}>Overview</li>
                 <li style={{ marginTop: '10px' }}>Asesores</li>
