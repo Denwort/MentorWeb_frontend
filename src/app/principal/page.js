@@ -1,4 +1,4 @@
-import MentorWebIco from "./MentorWebIco.png";
+import MentorWebIco from "./../MentorWebIco.png";
 import Image from "next/image";
 import { useMiProvider } from './../../context/context.js'
 
