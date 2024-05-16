@@ -11,17 +11,11 @@ export default function AdminDashboard({ children }) {
     <html lang="en">
       <body className="bg-customPink">
         <div className="flex h-screen">
-          <div className="w-48 bg-gray-200 p-4">
-            <h2>Cargar Horarios</h2>
-            <ul>
-              <li>Overview</li>
-              <li>Asesores</li>
-              <li>Subir Archivos</li>
-              <li>Dashboard de Administración</li>
-            </ul>
-            {/* Este div expande el menú lateral hasta abajo de la página */}
-            <div className="flex-grow"></div>
-          </div>
+
+          <nav class="w-1/6 h-screen flex flex-col space-y-4 p-4 bg-white">
+            <a href="#" class="py-2 px-4 bg-orange-500 text-white rounded-r-full">Cargar Horarios</a>
+          </nav>
+
           <div className="flex-1 p-4">
             <div className="container" style={{ padding: '20px' }}>
               <h2 className="subtitle" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#858585', marginBottom: '20px' }}>Account Status</h2>

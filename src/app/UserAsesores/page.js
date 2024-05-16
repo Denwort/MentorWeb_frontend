@@ -1,15 +1,14 @@
+import Link from "next/link";
+
 export default function UserAsesores() {
     return (
         <html lang="en">
             <body className="bg-customPink">
                 <div className="flex h-screen">
-                    <div className="w-48 bg-gray-200 p-10">
-                        <ul>
-                            <li style={{ marginTop: '10px' }}>Overview</li>
-                            <li style={{ marginTop: '10px' }}>Asesores</li>
-                        </ul>
-                    {/* Este div expande el menú lateral hasta abajo de la página */}
-                    </div>
+                <nav class="w-1/6 h-screen flex flex-col space-y-4 p-4 bg-white">
+                    <a href="/principal" class="text-black py-2 px-4 hover:bg-orange-500 hover:text-white hover:rounded-r-full">Overview</a>
+                    <a href="#" class="py-2 px-4 bg-orange-500 text-white rounded-r-full">Asesores</a>
+                </nav>
                     <div className="ml-20">
                         <div className="row-start-1 mt-10 items-center justify-center ">
                             <div className="row-start-1 flex ">
@@ -25,8 +24,9 @@ export default function UserAsesores() {
                                 <div className=" bg-blue-500 rounded-full flex items-center justify-center" style={{ width: '130px', height: '130px' }}>
                                     <p className="text-white font-bold text-lg">Imagen</p>
                                 </div>
+                                
                                 <div className="mt-4">
-                                    <p className="text-white font-bold text-lg" >Hernan Nina</p>
+                                    <Link href="/listadoHorarios" className="text-white font-bold text-lg">Hernan Nina</Link>
                                 </div>
                             </div>
                             <div className="bg-orange-500 flex flex-col items-center justify-center  m-7" style={{ width: '180px', height: '200px' }}>

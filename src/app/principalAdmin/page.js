@@ -1,3 +1,4 @@
+import Link from "next/link";
 import MentorWebIco from "./../MentorWebIco.png";
 import Image from "next/image";
 
@@ -11,13 +12,10 @@ export default function UploadPage({ children }) {
     <html lang="en">
       <body className="bg-customPink">
         <div className="flex h-screen">
-          <div className="w-48 bg-gray-200 p-4">
-            <ul>
-              <li>Cargar Horarios</li>
-            </ul>
-            {/* Este div expande el menú lateral hasta abajo de la página */}
-            <div className="flex-grow"></div>
-          </div>
+          <nav class="w-1/6 h-screen flex flex-col space-y-4 p-4 bg-white">
+              <a href="#" class="py-2 px-4 bg-orange-500 text-white rounded-r-full">Cargar Horarios</a>
+          </nav>
+
           <div className="flex-1 p-4">
             <div className="container" style={{ padding: '20px' }}>
               <h2 className="subtitle" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#858585', marginBottom: '20px' }}>Subir Archivo</h2>
@@ -32,7 +30,7 @@ export default function UploadPage({ children }) {
                 </div>
               </div>
               {/* Botón para agregar una nueva carta */}
-              <button className="ingresar-btn" style={{ backgroundColor: '#ff6440', borderRadius: '10px', padding: '8px', color: 'white', width: '90px', position: 'absolute', bottom: '10px', right: '10px'}}>add card</button>
+              <Link href="/previewAdmin" className="ingresar-btn" style={{ backgroundColor: '#ff6440', borderRadius: '10px', padding: '8px', color: 'white', width: '90px', position: 'absolute', bottom: '10px', right: '10px'}}>add card</Link>
             </div>
           </div>
         </div>
