@@ -1,7 +1,6 @@
 'use client'
 import React, { useState } from 'react';
 import { useMiProvider } from './../context/context.js'
-import Link from 'next/link.js';
 
 export default function Home() {
 
@@ -73,18 +72,18 @@ export default function Home() {
               <div className='grid row-cols-2 gap-4'>
                 //creo q esta mal xq debe esperar la confirmacion de base de datos
                 {tabien === 0 ? (
-                <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline" type="button" onClick={handleLogin}>
-                  <Link href="/principal">Iniciar Sesión</Link>
-                </button>
+                <a href="/principal" className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline text-center" type="button" onClick={handleLogin}>
+                  Iniciar Sesión
+                </a>
                 ) : (
-                  <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline" type="button" onClick={handleLogin}>
-                    <Link href="/principal">Iniciar Sesión</Link>
-                  </button>
+                  <a href="/principal" className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline text-center" type="button" onClick={handleLogin}>
+                    Iniciar Sesión
+                  </a>
                 )}
 
-                <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline" type="button" >
-                  <Link href="/signup">Crear Cuenta</Link>
-                </button>
+                
+                <a href="/signup" className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline text-center" type="button">Crear Cuenta</a>
+                
               </div>
             </div>
             

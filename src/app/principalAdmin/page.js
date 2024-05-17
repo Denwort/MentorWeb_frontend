@@ -1,6 +1,6 @@
-import Link from "next/link";
+
 import MentorWebIco from "./../MentorWebIco.png";
-import Image from "next/image";
+
 
 export const metadata = {
   title: "Subir Archivos",
@@ -12,7 +12,7 @@ export default function UploadPage({ children }) {
     <html lang="en">
       <body className="bg-customPink">
         <div className="flex h-screen">
-          <nav class="w-1/6 h-screen flex flex-col space-y-4 p-4 bg-white">
+          <nav class="w-1/6 h-screen flex flex-col space-y-4 pr-4 bg-white pt-4">
               <a href="#" class="py-2 px-4 bg-orange-500 text-white rounded-r-full">Cargar Horarios</a>
           </nav>
 
@@ -30,7 +30,7 @@ export default function UploadPage({ children }) {
                 </div>
               </div>
               {/* Botón para agregar una nueva carta */}
-              <Link href="/previewAdmin" className="ingresar-btn" style={{ backgroundColor: '#ff6440', borderRadius: '10px', padding: '8px', color: 'white', width: '90px', position: 'absolute', bottom: '10px', right: '10px'}}>add card</Link>
+              <a href="/previewAdmin" className="ingresar-btn" style={{ backgroundColor: '#ff6440', borderRadius: '10px', padding: '8px', color: 'white', width: '90px', position: 'absolute', bottom: '10px', right: '10px'}}>add card</a>
             </div>
           </div>
         </div>

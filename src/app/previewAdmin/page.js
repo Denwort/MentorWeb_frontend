@@ -1,4 +1,3 @@
-import MentorWebIco from "./../MentorWebIco.png";
 import Image from "next/image";
 
 export const metadata = {
@@ -12,7 +11,7 @@ export default function AdminDashboard({ children }) {
       <body className="bg-customPink">
         <div className="flex h-screen">
 
-          <nav class="w-1/6 h-screen flex flex-col space-y-4 p-4 bg-white">
+          <nav class="w-1/6 h-screen flex flex-col space-y-4 pr-4 bg-white pt-4">
             <a href="#" class="py-2 px-4 bg-orange-500 text-white rounded-r-full">Cargar Horarios</a>
           </nav>
 

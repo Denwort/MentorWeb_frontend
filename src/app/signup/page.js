@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation.js';
-import Link from 'next/link';
+
 
 export default function Home() {
 
@@ -141,7 +141,7 @@ export default function Home() {
                 <div className="bg-orange-900 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline">Por favor cumpla los espacios para continuar</div>
               ) : (
                 <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline" type="button" onClick={handleSignUp}>
-                  <Link href="/">Crear Cuenta</Link>
+                  <a href="/">Crear Cuenta</a>
                 </button>
               )}
           </div>

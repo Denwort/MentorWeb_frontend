@@ -1,10 +1,14 @@
+import reservasData from '../../json/reservas.json';
+
 export default function Home() {
     return (
         <main className="flex">
-            <nav className="w-1/6 h-auto flex flex-col space-y-4 p-4 bg-white">
+
+            <nav className="w-1/6 h-auto flex flex-col space-y-4 pr-4 bg-white pt-4">
                 <a href="/principal" className="text-black py-2 px-4 hover:bg-orange-500 hover:text-white hover:rounded-r-full">Overview</a>
                 <a href="#" className="py-2 px-4 bg-orange-500 text-white rounded-r-full">Asesores</a>
             </nav>
+
             <div className="flex justify-center items-center pt-8 w-5/6">
                 <div className="grid grid-rows-2 gap-2 w-2/3">
                     <div className="grid grid-rows-3 gap-2">
@@ -13,7 +17,7 @@ export default function Home() {
                                 <p className="text-white font-bold text-lg">Imagen</p>
                             </div>
                         </div>
-                        <div className="row-start-2 flex items-center justify-center grid grid-rows-2 gap-1">
+                        <div className="row-start-2 items-center justify-center grid grid-rows-2 gap-1">
                             <div className="row-start-1 flex items-center justify-center">
                                 <p className="text-gray-500 font-bold text-xl">Fiorella Capcha</p>
                             </div>
