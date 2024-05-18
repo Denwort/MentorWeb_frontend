@@ -10,31 +10,33 @@ export default function Home() {
             </nav>
 
             <div className="flex justify-center items-center pt-8 w-5/6">
-                <div className="grid grid-rows-2 gap-2 w-2/3">
-                    <div className="grid grid-rows-3 gap-2">
+                <div className="grid grid-rows-2 h-3/4 w-2/3">
+                    <div className="grid grid-rows-2">
                         <div className="row-start-1 flex items-center justify-center">
-                            <div className="w-24 h-24 bg-blue-500 rounded-full flex items-center justify-center">
+                            <div className="w-48 h-48 bg-blue-500 rounded-full flex items-center justify-center">
                                 <p className="text-white font-bold text-lg">Imagen</p>
                             </div>
                         </div>
-                        <div className="row-start-2 items-center justify-center grid grid-rows-2 gap-1">
+                        <div className="row-start-2 items-center justify-center grid grid-rows-3 h-3/4">
                             <div className="row-start-1 flex items-center justify-center">
-                                <p className="text-gray-500 font-bold text-xl">Fiorella Capcha</p>
+                                <p className="text-gray-500 font-bold text-xl pt-10">Fiorella Capcha</p>
                             </div>
-                            <div className="row-start-2 flex items-center justify-center">
+                            <div className="row-start-2 flex justify-center">
                                 <p className="text-gray-500">fcapcha@ulima.edu.pe</p>
                             </div>
-                        </div>
-                        <div className="row-start-3 flex items-center justify-center"> 
-                            <div className="grid grid-cols-2 gap-2">
-                                <div className="col-start-1 flex items-center justify-center">
-                                    <div className="px-6 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                                        <p className="text-white font-bold">Gest. Ope.</p>
+                        
+                            <div className="row-start-3 flex items-center justify-center"> 
+                                <div className="grid grid-cols-2 gap-2">
+                                    <div className="col-start-1 flex items-center justify-center">
+                                        <div className="px-6 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                                            <p className="text-white font-bold">Gest. Ope.</p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="col-start-2 flex items-center justify-center">
-                                    <div className="px-6 h-10 bg-yellow-500 rounded-full flex items-center justify-center">
-                                        <p className="text-white font-bold">Simulacion</p>
+                        
+                                    <div className="col-start-2 flex items-center justify-center">
+                                        <div className="px-6 h-10 bg-yellow-500 rounded-full flex items-center justify-center">
+                                            <p className="text-white font-bold">Simulacion</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
