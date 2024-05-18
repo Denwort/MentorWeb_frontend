@@ -7,13 +7,6 @@ export const metadata = {
 
 export default function AdminDashboard({ children }) {
   return (
-    <html lang="en">
-      <body className="bg-customPink">
-        <div className="flex h-screen">
-
-          <nav class="w-1/6 h-screen flex flex-col space-y-4 pr-4 bg-white pt-4">
-            <a href="#" class="py-2 px-4 bg-orange-500 text-white rounded-r-full">Cargar Horarios</a>
-          </nav>
 
           <div className="flex-1 p-4">
             <div className="container" style={{ padding: '20px' }}>
@@ -58,8 +51,5 @@ export default function AdminDashboard({ children }) {
               </div>
             </div>
           </div>
-        </div>
-      </body>
-    </html>
   );
 }

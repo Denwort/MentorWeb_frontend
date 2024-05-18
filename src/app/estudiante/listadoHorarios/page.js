@@ -1,13 +1,6 @@
-import reservasData from '../../json/reservas.json';
 
 export default function Home() {
     return (
-        <main className="flex">
-
-            <nav className="w-1/6 h-auto flex flex-col space-y-4 pr-4 bg-white pt-4">
-                <a href="/principal" className="text-black py-2 px-4 hover:bg-orange-500 hover:text-white hover:rounded-r-full">Overview</a>
-                <a href="#" className="py-2 px-4 bg-orange-500 text-white rounded-r-full">Asesores</a>
-            </nav>
 
             <div className="flex justify-center items-center pt-8 w-5/6">
                 <div className="grid grid-rows-2 h-3/4 w-2/3">
@@ -115,7 +108,6 @@ export default function Home() {
                     </div>
                 </div> 
         </div>
-      </main>
       
     )
   }

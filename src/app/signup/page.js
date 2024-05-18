@@ -18,7 +18,7 @@ export default function Home() {
 
   const handleSignUp = async () => {
     try {
-      const response = await fetch(' http://127.0.0.1:8000/autenticacion/registrar/', {
+      const response = await fetch(' http://127.0.0.1:8000/registrar/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,17 +33,13 @@ export default function Home() {
       
       if (response.ok) {
         const data = await response.json();
-
-        if(hasError==0){
-          if (data.tipo!=0){
-            router.push('/login')
-          }else{
-            alert(data.mensaje);
-          }
-        }else{
-          alert("no")
-        }
+        alert("Registro exitoso");
+        router.push('/login')
       } 
+      else {
+        const error = await response.text();
+        alert(error);
+      }
 
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
@@ -137,13 +133,11 @@ export default function Home() {
               </div>
 
           <div className="flex items-center justify-center">
-            {hasError === 0 ? (
-                <div className="bg-orange-900 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline">Por favor cumpla los espacios para continuar</div>
-              ) : (
-                <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline" type="button" onClick={handleSignUp}>
-                  <a href="/">Crear Cuenta</a>
-                </button>
-              )}
+
+            <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline" type="button" onClick={handleSignUp}>
+              Crear Cuenta
+            </button>
+ 
           </div>
           
           </div>

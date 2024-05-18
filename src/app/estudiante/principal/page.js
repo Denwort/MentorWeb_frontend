@@ -1,7 +1,6 @@
 'use client'
-import Image from "next/image";
-import ojo from "./../../../public/ojo.png";
-import persona from "./../../../public/persona.webp";
+import { useMiProvider } from '@/context/context';
+import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 
 const obtenerAsesoriasEstudiante = async (id) => {
@@ -24,12 +23,21 @@ const obtenerAsesoriasEstudiante = async (id) => {
 };
 
 const AsesoriasEstudianteCards = () => {
+
+  const [cuenta] = useMiProvider();
+  const router = useRouter();
+
+  if (!cuenta){
+    router.push('/')
+  }
+  const estudiante_id = cuenta.persona.id
+
   const [asesoriasData, setAsesoriasData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await obtenerAsesoriasEstudiante(144);
+        const data = await obtenerAsesoriasEstudiante(estudiante_id);
         setAsesoriasData(data);
       } catch (error) {
         console.error('Error al obtener las asesorías del estudiante:', error.message);
@@ -40,20 +48,6 @@ const AsesoriasEstudianteCards = () => {
   }, []);
 
   return (
-    <html lang="en">
-      <body className="bg-customPink" style={{ overflow: 'hidden' }}> {/*Overflow hidden para no poder desplazar la pagina*/}
-        <div className="flex h-screen">
-          <nav className="w-1/6 h-screen flex flex-col space-y-4 pr-4 bg-white pt-4">
-            <a href="#" className="flex items-center py-2 px-4 bg-orange-500 text-white rounded-r-full">
-              <Image src={ojo} alt="Icono" className="h-6 w-6 mr-2"/>
-              Overview
-            </a>
-            <a href="/UserAsesores" className="flex items-center text-black py-2 px-4 hover:bg-orange-500 hover:text-white hover:rounded-r-full">
-              <Image src={persona} alt="Icono" className="h-6 w-6 mr-2"/>
-              Asesores
-            </a>
-          </nav>          
-
           <div className="flex-1 p-4">
             <div className="container" style={{ padding: '20px' }}>
               <h2 className="subtitle" style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '20px' }}>Asesorías próximas</h2>
@@ -78,9 +72,7 @@ const AsesoriasEstudianteCards = () => {
               </div>
             </div>
           </div>
-        </div>
-      </body>
-    </html>
+
   );
 };
 
