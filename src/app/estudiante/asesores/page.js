@@ -44,7 +44,7 @@ export default function UserAsesores() {
 
     useEffect(()=>{
         handleConsulta(keyword);
-    })
+    }, [])
 
     return (
 
@@ -68,7 +68,7 @@ export default function UserAsesores() {
                             <div  className="grid grid-cols-4 gap-4  bg-white mt-10 pt-8 pl-8" style={{ width: '1100px', height: '500px' }}>
 
                                 {resultados.map((reserva) => (
-                                        <Link href="/listadoHorarios" key={reserva.id} className="block">
+                                        <Link href={`./asesor/?id=${reserva.id}`} key={reserva.id} className="block">
 
                                             <div className="relative w-48 h-48 bg-gradient-to-r from-blue-500 to-green-500 flex flex-col items-center justify-center m-4">
                                                 <div className="w-24 h-24 bg-white rounded-full overflow-hidden flex items-center justify-center">

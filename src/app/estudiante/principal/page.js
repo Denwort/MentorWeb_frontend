@@ -1,5 +1,5 @@
 'use client'
-import { useMiProvider } from '@/context/context';
+import { useMiProvider } from '/src/context/context.js';
 import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 

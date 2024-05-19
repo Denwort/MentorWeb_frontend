@@ -31,7 +31,7 @@ export default function Home() {
           router.push('/estudiante/principal');
         }
         else if(data.persona.tipo == "Administrador"){
-          router.push('principal');
+          router.push('/admin/principal');
         }
         
       } 
