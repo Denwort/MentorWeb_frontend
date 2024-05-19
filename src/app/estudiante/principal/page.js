@@ -25,11 +25,7 @@ const obtenerAsesoriasEstudiante = async (id) => {
 const AsesoriasEstudianteCards = () => {
 
   const [cuenta] = useMiProvider();
-  const router = useRouter();
 
-  if (!cuenta){
-    router.push('/')
-  }
   const estudiante_id = cuenta.persona.id
 
   const [asesoriasData, setAsesoriasData] = useState([]);
