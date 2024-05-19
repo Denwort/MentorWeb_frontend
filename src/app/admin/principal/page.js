@@ -6,9 +6,11 @@ export default function UploadPage({ children }) {
   const [excel_asesorias, setExcel_asesorias] = useState(null);
   const [periodo, setPeriodo] = useState('');
   const [fecha_inicio, setFecha_inicio] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     const formData = new FormData();
     formData.append('excel_secciones', excel_secciones);
@@ -69,13 +71,10 @@ export default function UploadPage({ children }) {
             <label style={{ display: 'block', marginBottom: '10px' }}>Fecha de inicio del periodo:</label>
             <input type="date" value={fecha_inicio} onChange={(e) => setFecha_inicio(e.target.value)} />
           </div>
-          <button type="submit" style={{ backgroundColor: '#ff6440', borderRadius: '10px', padding: '8px', color: 'white', width: '90px' }}>
-            Enviar
+          <button type="submit" style={{ backgroundColor: '#ff6440', borderRadius: '10px', padding: '8px', color: 'white', width: '90px' }}disabled={isSubmitting}>
+            {isSubmitting ? 'Enviando...' : 'Enviar'}
           </button>
         </form>
-        <a href="/previewAdmin" className="ingresar-btn" style={{ backgroundColor: '#ff6440', borderRadius: '10px', padding: '8px', color: 'white', width: '90px', position: 'absolute', bottom: '10px', right: '10px' }}>
-          add card
-        </a>
       </div>
     </div>
   );
