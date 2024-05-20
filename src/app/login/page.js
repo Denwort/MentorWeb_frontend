@@ -76,7 +76,6 @@ export default function Home() {
 
             <div className="flex items-center justify-center ">
               <div className='grid row-cols-2 gap-4'>
-                //creo q esta mal xq debe esperar la confirmacion de base de datos
                 <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline text-center" type="button" onClick={handleLogin}>
                   Iniciar Sesión
                 </button>

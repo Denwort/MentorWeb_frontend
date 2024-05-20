@@ -44,30 +44,30 @@ const AsesoriasEstudianteCards = () => {
   }, []);
 
   return (
-          <div className="flex-1 p-4">
-            <div className="container" style={{ padding: '20px' }}>
-              <h2 className="subtitle" style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '20px' }}>Asesorías próximas</h2>
-              <div className="cards" style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
-                {asesoriasData.map((asesoriaMAIN) => (
-                  <div key={asesoriaMAIN.id} className="card" style={{ width: 'calc(30% - 10px)', backgroundColor: "white", boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '8px', overflow: 'hidden', position: 'relative', padding: '20px' }}>
-                    <div className="cardContent" style={{ display: 'flex', alignItems: 'center' }}>
-                      <div className="imageContainer" style={{ position: 'relative', width: '100px', height: '100px', marginRight: '20px', background: 'linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 25%)' }}>
-                        <div className="circleBorder" style={{ position: 'absolute', width: '100%', height: '100%', borderRadius: '50%', border: '8px solid orange', clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)' }}></div>
-                      </div>
-                      <div className="textContent" style={{ flex: '1' }}>
-                        <h3 className="cardTitle" style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '10px' }}>{asesoriaMAIN.asesoria.seccion.profesor.nombres}</h3>
-                        <h1 className="cardTitle" style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '10px' }}>{asesoriaMAIN.asesoria.seccion.curso.nombre}</h1>
-                        <p className="cardSubtitle" style={{ fontSize: '1rem', color: '#666', marginBottom: '5px' }}>{asesoriaMAIN.asesoria.fecha_inicio}</p>
-                        <p className="cardSubtitle" style={{ fontSize: '1rem', color: '#666', marginBottom: '5px' }}>{asesoriaMAIN.asesoria.fecha_fin}</p>
-                        <p className="cardSubtitle" style={{ fontSize: '1rem', color: '#666', marginBottom: '5px' }}>ID General: {asesoriaMAIN.id}</p> {/*Le puse el id general pq parecia que se repetian, pero solo era que tenian la misma info xd*/}
-                      </div>
-                    </div>
-                    <button className="ingresar-btn" style={{ backgroundColor: '#ff6440', borderRadius: '10px', padding: '8px', color: 'white', width: '90px', position: 'absolute', bottom: '10px', right: '10px' }}>Ingresar</button>
+      <div className="h-max">
+        <div className="container p-5">
+          <h2 className="text-xl font-bold mb-5">Asesorías próximas</h2>
+          <div className="flex flex-wrap gap-5">
+            {asesoriasData.map((asesoriaMAIN) => (
+              <div key={asesoriaMAIN.id} className="w-[calc(30%-10px)] bg-white shadow-md rounded-lg overflow-hidden relative p-5">
+                <div className="flex items-center">
+                  <div className="relative w-24 h-24 mr-5 bg-gradient-to-r from-transparent to-white">
+                    <div className="absolute w-full h-full rounded-full border-8 border-orange-500 clip-path-[polygon(0%_0%,100%_0%,100%_100%,0%_100%)]"></div>
                   </div>
-                ))}
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold mb-2">{asesoriaMAIN.asesoria.seccion.profesor.nombres}</h3>
+                    <h1 className="text-base font-semibold mb-2">{asesoriaMAIN.asesoria.seccion.curso.nombre}</h1>
+                    <p className="text-base text-gray-600 mb-1">{asesoriaMAIN.asesoria.fecha_inicio}</p>
+                    <p className="text-base text-gray-600 mb-1">{asesoriaMAIN.asesoria.fecha_fin}</p>
+                    <p className="text-base text-gray-600 mb-1">ID General: {asesoriaMAIN.id}</p>
+                  </div>
+                </div>
+                <button className="bg-orange-500 rounded-lg py-2 px-4 text-white w-24 absolute bottom-2 right-2">Ingresar</button>
               </div>
-            </div>
+            ))}
           </div>
+        </div>
+      </div>
 
   );
 };

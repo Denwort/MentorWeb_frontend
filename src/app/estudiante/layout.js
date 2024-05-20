@@ -26,8 +26,8 @@ export default function DashboardLayout({ children }) {
   }
 
   return (
-    <div className="flex h-screen">
-      <nav className="w-1/6 h-screen flex flex-col space-y-4 pr-4 bg-white pt-4">
+    <div className="flex h-max">
+      <nav className="w-1/6 flex flex-col space-y-4 pr-4 bg-white pt-4">
         <div
           onClick={() => handleNavigation("./principal")}
           className={`cursor-pointer flex items-center py-2 px-4 ${activePage === "/estudiante/principal" ? "bg-orange-500 text-white rounded-r-full" : "text-black hover:bg-orange-500 hover:text-white hover:rounded-r-full"}`}

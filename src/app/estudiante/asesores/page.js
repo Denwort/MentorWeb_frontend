@@ -42,6 +42,22 @@ export default function UserAsesores() {
     
       }
 
+    const getRandomColor = () => {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    };
+
+    const getRandomGradient = () => {
+        const color1 = getRandomColor();
+        const color2 = getRandomColor();
+        return `linear-gradient(to right, ${color1}, ${color2})`;
+    };
+
+
     useEffect(()=>{
         handleConsulta(keyword);
     }, [])
@@ -50,7 +66,7 @@ export default function UserAsesores() {
 
                     <div className="ml-20">
                         
-                        <div className="row-start-1 mt-10 items-center justify-center">
+                        <div className="row-start-1 mt-10 items-center justify-center w-5/6">
                             <div className="row-start-1 flex ">
                                 <p className="text-gray-500 font-bold text-xl">Buscar asesores</p>
                             </div>
@@ -65,26 +81,26 @@ export default function UserAsesores() {
                             </div>
                         </div>
 
-                            <div  className="grid grid-cols-4 gap-4  bg-white mt-10 pt-8 pl-8" style={{ width: '1100px', height: '500px' }}>
+                            <div  className="grid grid-cols-4 gap-4 bg-white mt-10 pt-8 pl-8 w-5/6 h-auto" >
 
                                 {resultados.map((reserva) => (
-                                        <Link href={`./asesor/?id=${reserva.id}`} key={reserva.id} className="block">
+                                        <Link href={`./asesor/?id=${reserva.id}`} key={reserva.id} >
 
-                                            <div className="relative w-48 h-48 bg-gradient-to-r from-blue-500 to-green-500 flex flex-col items-center justify-center m-4">
-                                                <div className="w-24 h-24 bg-white rounded-full overflow-hidden flex items-center justify-center">
-                                                    
-                                                    <Image src={reserva.foto} alt="foto" width={100} height={100} className="w-full h-full object-cover" />
-                                                </div>
-                                                <div className="mt-4">
-                                                    <h1 className="text-white font-bold text-lg">{reserva.nombres}</h1>
-                                                </div>
-                                            </div>
+                                        <div className="relative w-64 h-64 flex flex-col items-center justify-center p-4" style={{ background: getRandomGradient() }}>
+                                          <div className="absolute top-8 w-24 h-24 bg-white rounded-full overflow-hidden flex items-center justify-center">
+                                            <Image src={reserva.foto} alt="foto" width={100} height={100} className="w-full h-full object-cover" />
+                                          </div>
+                                          <div className="absolute bottom-8 w-full px-4">
+                                            <h1 className="text-white font-bold text-base text-center">{reserva.nombres}</h1>
+                                          </div>
+                                        </div>
 
                                         </Link>
                                 ))}
                                 {resultados.length === 0 && <div className="text-center mt-4">Sin resultados</div>}                            </div>
 
-                    </div>
+                            </div>
+                            
 
     );
 }
