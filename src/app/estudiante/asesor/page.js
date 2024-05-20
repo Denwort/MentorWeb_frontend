@@ -27,6 +27,7 @@ export default function Home() {
             if (response.ok) {
                 const data = await response.json();
                 setAsesor(data);
+                console.log(data);
             } else {
                 const error = await response.text();
                 alert(error);
@@ -103,24 +104,23 @@ export default function Home() {
     };
 
     return (
-        <div className="flex justify-center items-center pt-8 w-5/6">
-            <div className="grid grid-rows-2 h-3/4 w-2/3">
+        <div className="flex flex-col justify-center items-center pt-8 w-5/6">
                 {asesor && (
                     <>
-                        <div className="grid grid-rows-2">
-                            <div className="row-start-1 flex items-center justify-center">
-                                <div className="w-48 h-48 bg-blue-500 rounded-full flex items-center justify-center">
-                                    <Image src={asesor.foto} alt={"foto"} width={1000} height={1000} className="text-white rounded-full font-bold text-lg"></Image>
+                        <div className="flex flex-col items-center justify-center">
+                            <div className="flex items-center justify-center">
+                                <div className="relative absolute w-48 h-48 rounded-full flex items-center justify-center">
+                                    <Image src={asesor.foto} alt={"foto"} width={1000} height={1000} className="w-full h-full object-cover rounded-full"></Image>
                                 </div>
                             </div>
-                            <div className="row-start-2 items-center justify-center grid grid-rows-3 h-3/4">
-                                <div className="row-start-1 flex items-center justify-center">
-                                    <p className="text-gray-500 font-bold text-xl pt-10">{asesor.nombres}</p>
+                            <div className="items-center justify-center">
+                                <div className="flex items-center justify-center">
+                                    <p className="text-gray-500 font-bold text-xl m-5">{asesor.nombres}</p>
                                 </div>
-                                <div className="row-start-3 flex items-center justify-center">
-                                    <div className="grid grid-cols-2 gap-2">
+                                <div className="flex items-center justify-center">
+                                    <div className="flex flex-wrap items-center justify-center w-3/4">
                                         {obtenerCursos(asesor.secciones).map((curso, index) => (
-                                            <div className="col-start-1 flex items-center justify-center" key={index}>
+                                            <div className="flex items-center justify-center m-2" key={index}>
                                                 <div className="px-6 h-10 bg-green-500 rounded-full flex items-center justify-center">
                                                     <p className="text-white font-bold">{curso}</p>
                                                 </div>
@@ -131,7 +131,7 @@ export default function Home() {
                             </div>
                         </div>
                         {obtenerAsesorias(asesor.secciones).length != 0 && (
-                        <div className="grid grid-rows-auto gap-3 grid-cols-5">
+                        <div className="grid grid-rows-auto gap-3 grid-cols-5 mb-9">
                             <div className="col-start-1 row-start-1">
                                 <div className="flex items-center justify-center py-10">ID</div>
                             </div>
@@ -163,16 +163,16 @@ export default function Home() {
                                     </div>
                                     <div className="col-start-5 row-start-auto flex items-center justify-center">
                                         
-                                            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-1.5 px-4 rounded-full"
-                                            onClick={() => handleReservar(asesoria.id)}>
-                                                Reservar
-                                            </button>
+                                        <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-1.5 px-4 rounded-full mx-2"
+                                        onClick={() => handleReservar(asesoria.id)}>
+                                            Reservar
+                                        </button>
                                         
-                                    </div>
-                                    <div className="col-start-6 row-start-auto flex items-center justify-center">
-                                        <a href={asesoria.enlace} target="_blank" rel="noopener noreferrer">
-                                        Ingresar
-                                        </a>
+                                        <div className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 px-4 rounded-full mx-2">
+                                            <a href={asesoria.enlace} target="_blank" rel="noopener noreferrer">
+                                                Ingresar
+                                            </a>
+                                        </div>  
                                     </div>
                                 </React.Fragment>
                             ))}
@@ -180,7 +180,6 @@ export default function Home() {
                         )}
                     </>
                 )}
-            </div>
         </div>
     );
 }
