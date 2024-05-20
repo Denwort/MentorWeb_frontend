@@ -2,15 +2,15 @@
 import "./globals.css";
 import MentorWebIco from "./MentorWebIco.png";
 import Image from "next/image";
-import { MiProvider } from './../context/context.js'
+import { MiProvider, useMiProvider } from './../context/context.js'
 
 
 export default function RootLayout({ children }) {
 
   return (
     <MiProvider>
-      <html lang="en">
-        <body className="bg-customPink">
+      <html lang="en" className="h-screen">
+        <body className="bg-customPink h-screen">
           <header className="bg-white">
             <div className="grid grid-cols-2 p-8  w-1/6">
               <Image src={MentorWebIco} alt="MentorWeb Icon" width={50} height={50} />

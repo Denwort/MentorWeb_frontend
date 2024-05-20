@@ -58,9 +58,8 @@ export default function Home() {
             seccion.asesorias.forEach(asesoria => {
                 let infoAsesoria = {
                     id: asesoria.id,
-                    fecha: new Date(asesoria.fecha_fin).toLocaleDateString(),
-                    hora_inicio: new Date(asesoria.fecha_inicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                    hora_fin: new Date(asesoria.fecha_fin).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                    fecha_inicio: asesoria.fecha_inicio,
+                    fecha_fin: asesoria.fecha_fin,
                     curso: seccion.curso.nombre,
                     ambiente: asesoria.ambiente,
                     enlace: asesoria.enlace
@@ -70,10 +69,26 @@ export default function Home() {
         });
 
         listaAsesorias.sort((a, b) => new Date(a.fecha_fin).getTime() - new Date(b.fecha_fin).getTime());
+        console.log(listaAsesorias)
         return listaAsesorias;
     }
 
-    
+    function obtenerFechayHora(startDate, endDate) {
+        const daysOfWeek = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+        const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+      
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+      
+        const dayOfWeek = daysOfWeek[start.getUTCDay()];
+        const day = start.getUTCDate();
+        const month = months[start.getUTCMonth()];
+
+        const startTime = start.toISOString().substring(11, 16); // Extract HH:mm from ISO string
+        const endTime = end.toISOString().substring(11, 16);     // Extract HH:mm from ISO string
+      
+        return [`${dayOfWeek} ${day} de ${month}`, `${startTime}-${endTime}`];
+      }
 
     const handleReservar = async (asesoria_id) => {
         
@@ -104,82 +119,87 @@ export default function Home() {
     };
 
     return (
-        <div className="flex flex-col justify-center items-center pt-8 w-5/6">
-                {asesor && (
-                    <>
-                        <div className="flex flex-col items-center justify-center">
-                            <div className="flex items-center justify-center">
-                                <div className="relative absolute w-48 h-48 rounded-full flex items-center justify-center">
-                                    <Image src={asesor.foto} alt={"foto"} width={1000} height={1000} className="w-full h-full object-cover rounded-full"></Image>
-                                </div>
+        <div className="flex flex-col justify-center items-center pt-8">
+            {asesor && (
+                <>
+                    {/* Información del asesor */}
+                    <div className="flex flex-col items-center justify-center">
+                        <div className="relative w-48 h-48 rounded-full overflow-hidden">
+                            <Image
+                                src={asesor.foto}
+                                alt={"foto"}
+                                width={1000}
+                                height={1000}
+                                layout="responsive"
+                                objectFit="cover"
+                                className="rounded-full"
+                            />
+                        </div>
+                        <div className="mt-4">
+                            <p className="text-gray-500 font-bold text-xl text-center">{asesor.nombres}</p>
+                        </div>
+                        <div className="mt-4 flex items-center justify-center">
+                            <div className="flex flex-wrap items-center justify-center w-full">
+                                {obtenerCursos(asesor.secciones).map((curso, index) => (
+                                    <div className="flex items-center justify-center m-2" key={index}>
+                                        <div className="px-4 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                                            <p className="text-white font-bold">{curso}</p>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                            <div className="items-center justify-center">
-                                <div className="flex items-center justify-center">
-                                    <p className="text-gray-500 font-bold text-xl m-5">{asesor.nombres}</p>
-                                </div>
-                                <div className="flex items-center justify-center">
-                                    <div className="flex flex-wrap items-center justify-center w-3/4">
-                                        {obtenerCursos(asesor.secciones).map((curso, index) => (
-                                            <div className="flex items-center justify-center m-2" key={index}>
-                                                <div className="px-6 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                                                    <p className="text-white font-bold">{curso}</p>
+                        </div>
+                    </div>
+    
+                    {/* Lista de asesorías */}
+                    {obtenerAsesorias(asesor.secciones).length != 0 && (
+                        <div className="overflow-x-auto mt-8">
+                            <table className="min-w-full bg-white border border-gray-200">
+                                <thead className="bg-gray-50">
+                                    <tr>
+                                        <th className="py-2 px-4 text-sm font-semibold text-gray-700">ID</th>
+                                        <th className="py-2 px-4 text-sm font-semibold text-gray-700">Fecha</th>
+                                        <th className="py-2 px-4 text-sm font-semibold text-gray-700">Hora</th>
+                                        <th className="py-2 px-4 text-sm font-semibold text-gray-700">Curso</th>
+                                        <th className="py-2 px-4 text-sm font-semibold text-gray-700">Ambiente</th>
+                                        <th className="py-2 px-4 text-sm font-semibold text-gray-700">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {obtenerAsesorias(asesor.secciones).map((asesoria, index) => (
+                                        <tr key={index} className="border-t border-gray-200">
+                                            <td className="py-3 px-4 text-sm font-medium text-gray-900">{asesoria.id}</td>
+                                            <td className="py-3 px-4 text-sm font-medium text-gray-900">
+                                                {obtenerFechayHora(asesoria.fecha_inicio, asesoria.fecha_fin)[0]}
+                                            </td>
+                                            <td className="py-3 px-4 text-sm font-medium text-gray-900">
+                                                {obtenerFechayHora(asesoria.fecha_inicio, asesoria.fecha_fin)[1]}
+                                            </td>
+                                            <td className="py-3 px-4 text-sm font-medium text-gray-900">{asesoria.curso}</td>
+                                            <td className="py-3 px-4 text-sm font-medium text-gray-900">{asesoria.ambiente}</td>
+                                            <td className="py-3 px-4 text-sm font-medium text-gray-900 flex items-center">
+                                                <button
+                                                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-1.5 px-4 rounded-full mx-2 text-sm"
+                                                    onClick={() => handleReservar(asesoria.id)}
+                                                >
+                                                    Reservar
+                                                </button>
+                                                <div className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 px-4 rounded-full mx-2 text-sm">
+                                                    <a href={asesoria.enlace} target="_blank" rel="noopener noreferrer">
+                                                        Ingresar
+                                                    </a>
                                                 </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
-                        {obtenerAsesorias(asesor.secciones).length != 0 && (
-                        <div className="grid grid-rows-auto gap-3 grid-cols-5 mb-9">
-                            <div className="col-start-1 row-start-1">
-                                <div className="flex items-center justify-center py-10">ID</div>
-                            </div>
-                            <div className="col-start-2 row-start-1">
-                                <div className="flex items-center justify-center py-10">Fecha</div>
-                            </div>
-                            <div className="col-start-3 row-start-1">
-                                <div className="flex items-center justify-center py-10">Hora</div>
-                            </div>
-                            <div className="col-start-4 row-start-1">
-                                <div className="flex items-center justify-center py-10">Curso</div>
-                            </div>
-                            <div className="col-start-5 row-start-1">
-                                <div className="flex items-center justify-center py-10">Acciones</div>
-                            </div>
-                            {obtenerAsesorias(asesor.secciones).map((asesoria, index) => (
-                                <React.Fragment key={index}>
-                                    <div className="col-start-1 row-start-auto">
-                                        <div className="flex items-center justify-center h-20">{asesoria.id}</div>
-                                    </div>
-                                    <div className="col-start-2 row-start-auto">
-                                        <div className="flex items-center justify-center h-20">{asesoria.fecha}</div>
-                                    </div>
-                                    <div className="col-start-3 row-start-auto">
-                                        <div className="flex items-center justify-center h-20">{asesoria.hora_inicio} - {asesoria.hora_fin}</div>
-                                    </div>
-                                    <div className="col-start-4 row-start-auto">
-                                        <div className="flex items-center justify-center h-20">{asesoria.curso}</div>
-                                    </div>
-                                    <div className="col-start-5 row-start-auto flex items-center justify-center">
-                                        
-                                        <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-1.5 px-4 rounded-full mx-2"
-                                        onClick={() => handleReservar(asesoria.id)}>
-                                            Reservar
-                                        </button>
-                                        
-                                        <div className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 px-4 rounded-full mx-2">
-                                            <a href={asesoria.enlace} target="_blank" rel="noopener noreferrer">
-                                                Ingresar
-                                            </a>
-                                        </div>  
-                                    </div>
-                                </React.Fragment>
-                            ))}
-                        </div>
-                        )}
-                    </>
-                )}
+                    )}
+                </>
+            )}
         </div>
     );
+    
+    
 }
