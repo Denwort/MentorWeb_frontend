@@ -11,8 +11,8 @@ export default function RootLayout({ children }) {
     <MiProvider>
       <html lang="en" className="h-screen">
         <body className="bg-customPink h-screen">
-          <header className="bg-white">
-            <div className="grid grid-cols-2 p-8  w-1/6">
+          <header className="bg-white h-28">
+            <div className="grid grid-cols-2 p-8 w-52">
               <Image src={MentorWebIco} alt="MentorWeb Icon" width={50} height={50} />
               <h1 className="pt-3">MentorWeb</h1> 
             </div>

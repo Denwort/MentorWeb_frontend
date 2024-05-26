@@ -5,30 +5,40 @@ import Image from "next/image";
 import ojo from "/public/ojo.png";
 import persona from "/public/persona.webp";
 import { useMiProvider } from '@/context/context';
+import { usePathname } from 'next/navigation'
 
 export default function DashboardLayout({ children }) {
   const router = useRouter();
-  const [activePage, setActivePage] = useState(router.pathname);
-  const [cuenta] = useMiProvider();
+  const pathname = usePathname()
+  const [activePage, setActivePage] = useState(pathname);
+  
+  const { cuenta, setCuenta } = useMiProvider();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    console.log(router)
+  }, []);
+
+  useEffect(() => {
+    if (isClient && !cuenta) {
+      router.push('/');
+    }
+  }, [isClient, cuenta, router]);
+
+  if (!isClient || !cuenta) {
+    return <p></p>
+  }
 
   const handleNavigation = (path) => {
     setActivePage(path);
     router.push(path);
   };
 
-  useEffect(()=>{
-    setActivePage("/estudiante/principal")
-  },[])
-
-  if (!cuenta){
-    router.push('/');
-    return (<p></p>)
-  }
-
   return (
-    <div className="flex flex-col lg:flex-row ">
+    <div className="flex flex-row">
         {/* Sidebar */}
-        <nav className="w-full lg:w-1/6 flex flex-col space-y-4 pr-4 bg-white pt-4">
+        <nav className="min-w-52 min-h-[calc(100vh-7rem)] flex flex-col space-y-4 pr-4 pt-4 bg-[#fdfdfd]">
             <div
                 onClick={() => handleNavigation("/estudiante/principal")}
                 className={`cursor-pointer flex items-center py-2 px-4 ${activePage === "/estudiante/principal" ? "bg-orange-500 text-white rounded-r-full" : "text-black hover:bg-orange-500 hover:text-white hover:rounded-r-full"}`}
@@ -38,11 +48,14 @@ export default function DashboardLayout({ children }) {
             </div>
             <div
                 onClick={() => handleNavigation("/estudiante/asesores")}
-                className={`cursor-pointer flex items-center py-2 px-4 ${activePage === "/estudiante/asesores" ? "bg-orange-500 text-white rounded-r-full" : "text-black hover:bg-orange-500 hover:text-white hover:rounded-r-full"}`}
+                className={`cursor-pointer flex items-center py-2 px-4 ${activePage === "/estudiante/asesores" ? "bg-orange-500 text-white rounded-r-full" : activePage === "/estudiante/asesor" ? "bg-orange-500 text-white rounded-r-full" : "text-black hover:bg-orange-500 hover:text-white hover:rounded-r-full"}`}
             >
                 <Image src={persona} alt="Icono" className="h-6 w-6 mr-2" />
                 <span className="truncate">Asesores</span>
             </div>
+            <button 
+            className="cursor-pointer py-2 px-4 rounded-full hover:bg-red-400"
+            onClick={()=>{setCuenta(); navigator.push}}>Cerrar sesion</button>
         </nav>
 
         {/* Main content */}

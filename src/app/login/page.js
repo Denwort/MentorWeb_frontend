@@ -7,7 +7,7 @@ export default function Home() {
 
   const [usuario, setUsuario] = useState('');
   const [password, setPassword] = useState('');
-  const [cuenta, setCuenta] = useMiProvider();
+  const { getCuenta, setCuenta } = useMiProvider();
   const router = useRouter();
 
   const handleLogin = async () => {
@@ -47,7 +47,7 @@ export default function Home() {
   }
 
   return (
-      <main className="flex justify-center items-center  pt-8 ">
+      <div className="flex justify-center items-center  pt-8 ">
         <div className="grid grid-row-2 gap-2 w-2/3">
             <div className="w-full"><h1 className="font-bold ">Login</h1></div>
 
@@ -92,7 +92,7 @@ export default function Home() {
         </div>  
 
         </div>
-      </main>
+      </div>
     
     )
   }

@@ -29,8 +29,19 @@ export default function UserAsesores() {
           
           if (response.ok) {
             const data = await response.json();
-            setResultados(data);
-            console.log(data)
+            let ordenado = data.sort((a, b) => {
+              const nombreA = a.nombres.toUpperCase(); 
+              const nombreB = b.nombres.toUpperCase();
+              if (nombreA < nombreB) {
+                return -1;
+              }
+              if (nombreA > nombreB) {
+                return 1;
+              }
+              return 0;
+            });
+            setResultados(ordenado);
+            console.log(ordenado)
           } 
           else{
             const error = await response.text();
@@ -42,19 +53,27 @@ export default function UserAsesores() {
     
       }
 
-    const getRandomColor = () => {
-        const letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
+      const colors = [
+        '#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#1abc9c',
+        '#e67e22', '#2c3e50', '#27ae60', '#e74c3c', '#f1c40f',
+        '#9b59b6', '#16a085', '#e74c3c', '#95a5a6', '#f39c12',
+        '#34495e', '#e74c3c', '#3498db', '#e74c3c', '#2ecc71'
+      ];
+      
+      let lastColorIndex = -1; // Último índice de color usado
+      
+      const getRandomColor = () => {
+        // Obtener un índice aleatorio que no sea el último utilizado
+        let randomIndex = Math.floor(Math.random() * colors.length);
+        while (randomIndex === lastColorIndex) {
+          randomIndex = Math.floor(Math.random() * colors.length);
         }
-        return color;
-    };
+        lastColorIndex = randomIndex; // Actualizar el último índice utilizado
+        return colors[randomIndex];
+      };
 
-    const getRandomGradient = () => {
-        const color1 = getRandomColor();
-        const color2 = getRandomColor();
-        return `linear-gradient(to right, ${color1}, ${color2})`;
+    const getRandomBackgroundColor = () => {
+      return getRandomColor();
     };
 
 
@@ -65,7 +84,7 @@ export default function UserAsesores() {
     return (
       <div className="ml-10 md:ml-20">
           {/* Buscador de asesores */}
-          <div className="mt-10 w-full md:w-5/6">
+          <div className="mt-10 w-full">
               <p className="text-gray-500 font-bold text-xl mb-5">Buscar asesores</p>
               <div className="relative w-full">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -85,7 +104,7 @@ export default function UserAsesores() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 bg-white my-10 py-8 px-8 w-full md:w-5/6">
               {resultados.map((reserva) => (
                   <Link href={`./asesor/?id=${reserva.id}`} key={reserva.id}>
-                      <div className="relative w-full h-64 flex flex-col items-center justify-center p-4" style={{ background: getRandomGradient() }}>
+                      <div className="relative w-full h-64 flex flex-col items-center justify-center p-4 rounded" style={{ background: getRandomBackgroundColor() }}>
                           <div className="absolute top-8 w-24 h-24 bg-white rounded-full overflow-hidden flex items-center justify-center">
                               <Image src={reserva.foto} alt="foto" width={100} height={100} className="w-full h-full object-cover" />
                           </div>

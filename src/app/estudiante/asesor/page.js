@@ -8,7 +8,7 @@ import React from 'react';
 export default function Home() {
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
-    const [cuenta] = useMiProvider();
+    const { cuenta, setCuenta } = useMiProvider();
 
     const [asesor, setAsesor] = useState(null);
 
@@ -152,12 +152,12 @@ export default function Home() {
                     </div>
     
                     {/* Lista de asesorías */}
+                    {obtenerAsesorias(asesor.secciones).length == 0 && (<div>Sin asesorias registradas</div>)}
                     {obtenerAsesorias(asesor.secciones).length != 0 && (
                         <div className="overflow-x-auto mt-8">
                             <table className="min-w-full bg-white border border-gray-200">
                                 <thead className="bg-gray-50">
                                     <tr>
-                                        <th className="py-2 px-4 text-sm font-semibold text-gray-700">ID</th>
                                         <th className="py-2 px-4 text-sm font-semibold text-gray-700">Fecha</th>
                                         <th className="py-2 px-4 text-sm font-semibold text-gray-700">Hora</th>
                                         <th className="py-2 px-4 text-sm font-semibold text-gray-700">Curso</th>
@@ -168,7 +168,6 @@ export default function Home() {
                                 <tbody>
                                     {obtenerAsesorias(asesor.secciones).map((asesoria, index) => (
                                         <tr key={index} className="border-t border-gray-200">
-                                            <td className="py-3 px-4 text-sm font-medium text-gray-900">{asesoria.id}</td>
                                             <td className="py-3 px-4 text-sm font-medium text-gray-900">
                                                 {obtenerFechayHora(asesoria.fecha_inicio, asesoria.fecha_fin)[0]}
                                             </td>
