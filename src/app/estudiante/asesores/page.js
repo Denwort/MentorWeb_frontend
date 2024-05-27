@@ -86,7 +86,7 @@ export default function UserAsesores() {
           {/* Buscador de asesores */}
           <div className="mt-10 w-full">
               <p className="text-gray-500 font-bold text-xl mb-5">Buscar asesores</p>
-              <div className="relative w-full">
+              <div className="relative w-5/6">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <Image src={busqueda} alt="Icono" className="h-6 w-6" />
                   </div>
