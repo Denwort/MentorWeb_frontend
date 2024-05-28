@@ -17,7 +17,8 @@ export default function Home() {
 
 
   const handleSignUp = async () => {
-    if(email != null && name != null && usuario != null && password != null){
+  
+    if( (email != null || email != "") && (name != null || name != "") && (usuario != null || usuario != "") && (password != null || password != "")){
       try {
         const response = await fetch(' http://127.0.0.1:8000/registrar/', {
           method: 'POST',
