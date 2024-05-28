@@ -17,32 +17,36 @@ export default function Home() {
 
 
   const handleSignUp = async () => {
-    try {
-      const response = await fetch(' http://127.0.0.1:8000/registrar/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          "nombres": name,
-          "correo": email,
-          "usuario": usuario, 
-          "contrasenha": password, 
-        }),
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        alert("Registro exitoso");
-        router.push('/login')
-      } 
-      else {
-        const error = await response.text();
-        alert(error);
+    if(email != null && name != null && usuario != null && password != null){
+      try {
+        const response = await fetch(' http://127.0.0.1:8000/registrar/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            "nombres": name,
+            "correo": email,
+            "usuario": usuario, 
+            "contrasenha": password, 
+          }),
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          alert("Registro exitoso");
+          router.push('/login')
+        } 
+        else {
+          const error = await response.text();
+          alert(error);
+        }
+  
+      } catch (error) {
+        console.error('Error al iniciar sesión:', error);
       }
-
-    } catch (error) {
-      console.error('Error al iniciar sesión:', error);
+    }else{
+      alert("tienes espacios en blanco")
     }
   };
 
