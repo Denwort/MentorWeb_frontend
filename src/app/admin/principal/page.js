@@ -30,7 +30,7 @@ export default function UploadPage({ children }) {
         alert('Archivos y datos enviados exitosamente');
       } else {
         const error = await response.text();
-        alert('Error en el envío: ' + error);
+        alert('Error en el envío: ' + error.length < 100 ? error: 'Error');
       }
     } catch (error) {
       console.error('Error:', error);

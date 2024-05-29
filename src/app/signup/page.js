@@ -40,7 +40,7 @@ export default function Home() {
         } 
         else {
           const error = await response.text();
-          alert(error);
+          alert(error.length < 100 ? error: 'Error');
         }
   
       } catch (error) {

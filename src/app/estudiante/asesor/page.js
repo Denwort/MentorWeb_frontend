@@ -30,7 +30,7 @@ export default function Home() {
                 console.log(data);
             } else {
                 const error = await response.text();
-                alert(error);
+                alert(error.length < 100 ? error: 'Error');
             }
         } catch (error) {
             console.error('Error:', error);
