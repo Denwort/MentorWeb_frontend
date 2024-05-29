@@ -15,10 +15,15 @@ export default function Home() {
   const [errors, setErrors] = useState({});
   const [hasError, setHasError] = useState(0);
 
+  function isEmptySpaces(str){
+    return str === null || str.match(/^ *$/)!=null;
+  }
+
+  const isFormValid = () => {
+    return email && !isEmptySpaces(name) && !isEmptySpaces(usuario) && password && hasError==0;
+  };
 
   const handleSignUp = async () => {
-  
-    if( (email != null || email != "") && (name != null || name != "") && (usuario != null || usuario != "") && (password != null || password != "")){
       try {
         const response = await fetch(' http://127.0.0.1:8000/registrar/', {
           method: 'POST',
@@ -46,9 +51,6 @@ export default function Home() {
       } catch (error) {
         console.error('Error al iniciar sesión:', error);
       }
-    }else{
-      alert("tienes espacios en blanco")
-    }
   };
 
   
@@ -139,7 +141,11 @@ export default function Home() {
 
           <div className="flex items-center justify-center">
 
-            <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline" type="button" onClick={handleSignUp}>
+            <button className={`${
+                isFormValid()
+                  ? 'bg-orange-500 hover:bg-orange-700'
+                  : 'bg-gray-500 cursor-not-allowed'
+              } text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline`} type="button" onClick={handleSignUp} disabled={!isFormValid()}>
               Crear Cuenta
             </button>
  
