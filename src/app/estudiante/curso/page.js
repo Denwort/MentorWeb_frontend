@@ -15,7 +15,7 @@ export default function RepositorioCurso() {
 
     const handleConsulta = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:8000/curso/', {
+            const response = await fetch('http://127.0.0.1:8000/documentos/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -29,9 +29,6 @@ export default function RepositorioCurso() {
                 const data = await response.json();
                 setCurso(data);
                 console.log(data);
-            } else {
-                const error = await response.text();
-                alert(error.length < 100 ? error: 'Error');
             }
         } catch (error) {
             console.error('Error:', error);
@@ -43,15 +40,34 @@ export default function RepositorioCurso() {
     }, []);
 
     return (
-        <div className="flex flex-col justify-center items-center pt-8">
+        <div className="pt-8">
             {curso ? (
                 <>
-                    <h1>{curso.nombre}</h1> {/* Asumiendo que curso tiene un nombre */}
-                    <p>ID del curso: {curso.id}</p>
-                    {/* Renderiza otras propiedades del curso según sea necesario */}
+                    {/* parte de la informacion del curso seleccionado */}
+                    <div className='flex justify-center items-center'>
+                        <h1>{curso.nombre}</h1>
+                    </div>
+
+                    {/* Parte de las secciones que existen */}
+                    <div className='flex flex-col'>
+                        {curso.secciones.map((secciones) => (
+                            <div key={secciones.id} className='flex flex-wrap'>
+                                <p>{secciones.codigo}</p>
+                                {secciones.documentos.length !== 0
+                                    ? secciones.documentos.map((documentos) => (
+                                        <div key={documentos.id}>
+                                            <p>{documentos.nombre}</p>
+                                        </div>
+                                    ))
+                                    : null}
+                            </div>
+                        ))}
+                    </div>
                 </>
             ) : (
-                <p>Cargando curso...</p>
+                <div className='flex flex-col justify-center items-center'>
+                    <p>Cargando curso...</p>
+                </div>
             )}
         </div>
     );
