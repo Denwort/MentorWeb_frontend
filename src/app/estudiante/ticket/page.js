@@ -127,9 +127,9 @@ export default function UploadPage({ children }) {
   return (
     <div className="flex-1 p-4">
 
-        <div className="flex-container" style={{ display: 'flex', justifyContent: 'space-between', padding: '20px', marginBottom: '20px' }}>
+        <div className="flex-container" style={{ display: 'flex', justifyContent: 'space-around', padding: '20px', marginBottom: '20px' }}>
             {/* Primer bloque (Rellenar) */}
-            <div className="containerRellenar" style={{ width: '435px', margin: '10px', backgroundColor: '#f0f0f0'}}>
+            <div className="containerRellenar" style={{ width: '435px', margin: '10px', backgroundColor: '#f0f0f0', marginLeft: '50px'}}>
                 <h2 className="subtitle" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#858585', marginBottom: '20px', textAlign: 'center'}}>
                     Creación de ticket
                 </h2>
@@ -182,7 +182,7 @@ export default function UploadPage({ children }) {
             </div>
 
             {/* Segundo bloque (Loddel PDF) */}
-            <div className="containerPDF" style={{ width: '400px', marginLeft: '10px', backgroundColor: '#f0f0f0', alignItems: 'center'}}>
+            <div className="containerPDF" style={{ width: '400px', marginLeft: '10px', backgroundColor: '#f0f0f0', alignItems: 'center', marginRight: '50px'}}>
                 <div>
                 <input type="file" onChange={(e) => {
                     setArchivo(e.target.files[0])
