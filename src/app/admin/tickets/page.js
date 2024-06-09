@@ -1,13 +1,13 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useMiProvider } from '/src/context/context.js';
+import Link from 'next/link';
 
 export default function AdminTicketsPage() {
   const [tickets, setTickets] = useState([]);
   const [filtro, setFiltro] = useState('Pendientes');
   const [isLoading, setIsLoading] = useState(true);
 
-  //Lo que adminisrtra que funcion usar
   useEffect(() => {
     if (filtro === 'Todos') {
       obtenerTodosLosTickets();
@@ -19,12 +19,12 @@ export default function AdminTicketsPage() {
   const obtenerTodosLosTickets = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://127.0.0.1:8000/ ', {
+      const response = await fetch('http://127.0.0.1:8000/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 'estudiante_id': 144 }), //creo que deberia preguntarle a david como obtener la informacion del estudiante, quiza usando una nueva funcion o preguntando si el ticket tiene el id del estudiante
+        body: JSON.stringify({ 'estudiante_id': 144 }),
       });
 
       if (response.ok) {
@@ -33,7 +33,6 @@ export default function AdminTicketsPage() {
         console.log('Data extraidaTODOSOK: ', data);
       } else {
         const error = await response.text();
-        //alert('Error en la carga de tickets: ' + (error.length < 100 ? error : 'Error'));
         console.log('Data extraidaTODOSNOTOK: ', error);
       }
     } catch (error) {
@@ -56,7 +55,6 @@ export default function AdminTicketsPage() {
         console.log('Data extraidaPendientesOK: ', data);
       } else {
         const error = await response.text();
-        //alert('Error en la carga de tickets pendientes: ' + (error.length < 100 ? error : 'Error'));
         console.log('Data extraidaPendientesNOTOK: ', error);
       }
     } catch (error) {
@@ -118,6 +116,11 @@ export default function AdminTicketsPage() {
                     <p><strong>Comentario:</strong> {ticket.comentario}</p>
                     <p><strong>Archivo:</strong> {ticket.archivo}</p>
                     <p><strong>Fecha de Envío:</strong> {new Date(ticket.fecha_envio).toLocaleString()}</p>
+                    <Link href={`./ticketEspecifico?id=${ticket.id}`}>
+                      <button style={{ marginTop: '10px', padding: '10px 20px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px' }}>
+                        Más información
+                      </button>
+                    </Link>
                   </div>
                 ))}
               </div>
@@ -143,7 +146,12 @@ export default function AdminTicketsPage() {
                     <p><strong>Comentario:</strong> {ticket.comentario}</p>
                     <p><strong>Archivo:</strong> {ticket.archivo}</p>
                     <p><strong>Fecha de Envío:</strong> {new Date(ticket.fecha_envio).toLocaleString()}</p>
-                    <p><strong>Estado establecido:</strong> {new Date(ticket.fecha_envio).toLocaleString()}</p> {/*Esto es lo que diferencia entre la pestaña de todos y la pestaña de pendientes*/}
+                    <p><strong>Estado establecido:</strong> {new Date(ticket.fecha_envio).toLocaleString()}</p>
+                    <Link href={`./ticketEspecifico?id=${ticket.id}`}>
+                      <button style={{ marginTop: '10px', padding: '10px 20px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px' }}>
+                        Más información
+                      </button>
+                    </Link>
                   </div>
                 ))}
               </div>
