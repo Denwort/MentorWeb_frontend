@@ -1,14 +1,14 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useMiProvider } from '/src/context/context.js';
-import Link from 'next/link';
+import { useRouter } from "next/navigation";
 
 export default function TicketEspecifico() {
   const { cuenta, setCuenta } = useMiProvider();
-  const estudiante_id = cuenta.persona.id
+  const router = useRouter();
+  const estudiante_id = cuenta.persona.id;
   const [isLoading, setIsLoading] = useState(true);
   const [tickets, setTicket] = useState([]);
-
 
   useEffect(() => {
     if (estudiante_id) {
@@ -43,16 +43,26 @@ export default function TicketEspecifico() {
     }
   };
 
+  const handleNavigation = (path) => {
+    router.push(path);
+  };
 
   return (
     <div className="flex-1 p-4">
+      <div
+        onClick={() => handleNavigation("/estudiante/ticket")}
+        className="cursor-pointer bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition-colors duration-300 flex justify-center items-center"
+      >
+        <span className="truncate">Crear ticket</span>
+      </div>
+
       {isLoading ? (
         <p>Cargando tickets...</p>
       ) : (
         <div style={{ width: '80%', margin: '0 auto' }}>
           {tickets.length > 0 ? (
             tickets.map(ticket => (
-              <div key={ticket.id} style={{ backgroundColor: '#f0f0f0', padding: '20px', borderRadius: '10px', marginBottom: '20px' }}>
+              <div key={ticket.id} style={{ backgroundColor: '#f0f0f0', padding: '20px', borderRadius: '10px', marginBottom: '20px', marginTop: '30px'}}>
                 <h3>{ticket.asunto}</h3>
                 <p><strong>Periodo:</strong> {ticket.seccion.periodo.codigo}</p>
                 <p><strong>Curso:</strong> {ticket.seccion.curso.nombre}</p>

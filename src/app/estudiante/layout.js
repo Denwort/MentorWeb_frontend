@@ -5,6 +5,7 @@ import Image from "next/image";
 import ojo from "/public/ojo.png";
 import curso from "/public/curso.png";
 import persona from "/public/persona.webp";
+import marcador from "/public/marcador.png";
 import { useMiProvider } from '@/context/context';
 import { usePathname } from 'next/navigation'
 
@@ -60,6 +61,13 @@ export default function DashboardLayout({ children }) {
             >
                 <Image src={curso} alt="Icono" className="h-6 w-6 mr-2" />
                 <span className="truncate">Cursos</span>
+            </div>
+            <div
+                onClick={() => handleNavigation("/estudiante/tickets")}
+                className={`cursor-pointer flex items-center py-2 px-4 ${activePage === "/estudiante/tickets" ? "bg-orange-500 text-white rounded-r-full" : "text-black hover:bg-orange-500 hover:text-white hover:rounded-r-full"}`}
+            >
+                <Image src={marcador} alt="Icono" className="h-6 w-6 mr-2" />
+                <span className="truncate">Tickets</span>
             </div>
             <button 
             className="cursor-pointer py-2 px-4 rounded-full hover:bg-red-400"
