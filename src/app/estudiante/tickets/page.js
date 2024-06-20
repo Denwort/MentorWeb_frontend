@@ -47,6 +47,10 @@ export default function TicketEspecifico() {
     router.push(path);
   };
 
+  const getFileName = (filePath) => {
+    return filePath.split('/').pop();
+  };
+
   return (
     <div className="flex-1 p-4">
       <div
@@ -69,7 +73,7 @@ export default function TicketEspecifico() {
                 <p><strong>Sección:</strong> {ticket.seccion.codigo} - {ticket.seccion.profesor.nombres}</p>
                 <p><strong>Comentario:</strong> {ticket.comentario}</p>
                 <p><strong>Descripcion:</strong> {ticket.descripcion}</p>
-                <p><strong>Archivo:</strong> {ticket.archivo}</p>
+                <p><strong>Archivo:</strong> <a href={`http://127.0.0.1:8000${ticket.archivo}`} download>{getFileName(ticket.archivo)}</a></p>
                 <p><strong>Estado establecido:</strong> {ticket.estado}</p>
               </div>
             ))

@@ -79,6 +79,10 @@ export default function AdminTicketsPage() {
     pageNumbers.push(i);
   }
 
+  const getFileName = (filePath) => {
+    return filePath.split('/').pop();
+  };
+
   return (
     <div className="flex-1 p-4">
       <h1 className="title" style={{ fontSize: '2rem', fontWeight: 'bold', color: '#333', marginBottom: '20px', textAlign: 'center' }}>
@@ -129,7 +133,7 @@ export default function AdminTicketsPage() {
                   <p><strong>Sección:</strong> {ticket.seccion.codigo} - {ticket.seccion.profesor.nombres}</p>
                   <p><strong>Comentario:</strong> {ticket.comentario}</p>
                   <p><strong>Descripcion:</strong> {ticket.descripcion}</p>
-                  <p><strong>Archivo:</strong> {ticket.archivo}</p>
+                  <p><strong>Archivo:</strong> <a href={`http://127.0.0.1:8000${ticket.archivo}`} download>{getFileName(ticket.archivo)}</a></p>
                   <p><strong>Estado establecido:</strong> {ticket.estado}</p>
                   <Link href={`./ticketEspecifico?id=${ticket.id}`}>
                     <button style={{ marginTop: '10px', padding: '10px 20px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px' }}>
