@@ -55,17 +55,14 @@ export default function RepositorioCurso() {
           Abrir contenido en otra ventana
         </a>
       </div>
-      <div className="flex justify-center items-center h-screen bg-gray-100">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <iframe
-            src={fileUrl}
-            title="Contenido Externo"
-            width="100%"
-            height="600px"
-            className="frame"
-          ></iframe>
-        </div>
-      </div>
+
+      {/* Tratando de hacer la previsualizacion */}
+      <label
+        style={{ display: "block", marginBottom: "10px", marginTop: "10px" }}
+      >
+        Visualización del archivo:
+      </label>
+      <embed src={fileUrl} type="application/pdf" width="100%" height="500px" />
     </div>
   );
 }
