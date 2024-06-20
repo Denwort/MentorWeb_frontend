@@ -124,10 +124,10 @@ export default function AdminTicketsPage() {
           currentTickets.length === 0 ? (
             <p>No hay tickets disponibles.</p>
           ) : (
-            <div style={{ width: '80%', backgroundColor: '#f0f0f0', padding: '20px', borderRadius: '10px' }}>
+            <div style={{ width: '80%', backgroundColor: '#f0f0f0', padding: '20px', borderRadius: '10px'}}>
               {currentTickets.map(ticket => (
-                <div key={ticket.id} style={{ borderBottom: '1px solid #ddd', padding: '10px 0', marginTop: '20px' }}>
-                  <h3 style={{ marginBottom: '5px' }}>{ticket.asunto}</h3>
+                <div key={ticket.id} style={{ borderBottom: '1px solid #ddd', padding: '20px', marginBottom: '30px', backgroundColor: '#fff', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'}}>
+                  <h3 style={{ marginBottom: '10px' }}>{ticket.asunto}</h3>
                   <p><strong>Periodo:</strong> {ticket.seccion.periodo.codigo}</p>
                   <p><strong>Curso:</strong> {ticket.seccion.curso.nombre}</p>
                   <p><strong>Sección:</strong> {ticket.seccion.codigo} - {ticket.seccion.profesor.nombres}</p>
@@ -146,7 +146,7 @@ export default function AdminTicketsPage() {
           )
         )}
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px'}}>
         <nav>
           <ul style={{ display: 'flex', listStyle: 'none', padding: 0 }}>
             {pageNumbers.map(number => (

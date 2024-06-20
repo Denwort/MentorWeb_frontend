@@ -9,6 +9,8 @@ export default function TicketEspecifico() {
   const estudiante_id = cuenta.persona.id;
   const [isLoading, setIsLoading] = useState(true);
   const [tickets, setTicket] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ticketsPerPage = 3;
 
   useEffect(() => {
     if (estudiante_id) {
@@ -51,6 +53,21 @@ export default function TicketEspecifico() {
     return filePath.split('/').pop();
   };
 
+  const handleClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Calculate the current tickets to display
+  const indexOfLastTicket = currentPage * ticketsPerPage;
+  const indexOfFirstTicket = indexOfLastTicket - ticketsPerPage;
+  const currentTickets = tickets.slice(indexOfFirstTicket, indexOfLastTicket);
+
+  // Create page numbers
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(tickets.length / ticketsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
   return (
     <div className="flex-1 p-4">
       <div
@@ -64,8 +81,8 @@ export default function TicketEspecifico() {
         <p>Cargando tickets...</p>
       ) : (
         <div style={{ width: '80%', margin: '0 auto' }}>
-          {tickets.length > 0 ? (
-            tickets.map(ticket => (
+          {currentTickets.length > 0 ? (
+            currentTickets.map(ticket => (
               <div key={ticket.id} style={{ backgroundColor: '#f0f0f0', padding: '20px', borderRadius: '10px', marginBottom: '20px', marginTop: '30px'}}>
                 <h3>{ticket.asunto}</h3>
                 <p><strong>Periodo:</strong> {ticket.seccion.periodo.codigo}</p>
@@ -80,6 +97,19 @@ export default function TicketEspecifico() {
           ) : (
             <p>No se encontraron tickets para este estudiante.</p>
           )}
+
+          {/* Pagination */}
+          <div className="flex justify-center mt-4">
+            {pageNumbers.map(number => (
+              <button
+                key={number}
+                onClick={() => handleClick(number)}
+                className={`py-2 px-4 rounded-md mx-1 ${currentPage === number ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+              >
+                {number}
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </div>
