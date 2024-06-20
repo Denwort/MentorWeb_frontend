@@ -100,7 +100,7 @@ export default function TicketEspecifico() {
         <div style={{ width: '80%', backgroundColor: '#f0f0f0', padding: '20px', borderRadius: '10px', margin: '0 auto' }}>
           <h2 style={{ marginBottom: '10px' }}>{ticket.asunto}</h2>
           <p><strong>Periodo:</strong> {ticket.seccion.periodo.codigo}</p>
-          <p><strong>Curso:</strong> {ticket.curso_nombre}</p>
+          <p><strong>Curso:</strong> {ticket.seccion.curso.nombre}</p>
           <p><strong>Sección:</strong> {ticket.seccion.codigo} - {ticket.seccion.profesor.nombres}</p>
           <p><strong>Comentario:</strong> {ticket.comentario}</p>
           <p><strong>Archivo:</strong> {ticket.archivo}</p>

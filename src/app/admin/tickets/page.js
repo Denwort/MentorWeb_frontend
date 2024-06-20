@@ -111,7 +111,7 @@ export default function AdminTicketsPage() {
                   <div key={ticket.id} style={{ borderBottom: '1px solid #ddd', padding: '10px 0', marginTop: '20px' }}>
                     <h3 style={{ marginBottom: '5px' }}>{ticket.asunto}</h3>
                     <p><strong>Periodo:</strong> {ticket.seccion.periodo.codigo}</p>
-                    <p><strong>Curso:</strong> {ticket.curso_nombre}</p>
+                    <p><strong>Curso:</strong> {ticket.seccion.curso.nombre}</p>
                     <p><strong>Sección:</strong> {ticket.seccion.codigo} - {ticket.seccion.profesor.nombres}</p>
                     <p><strong>Comentario:</strong> {ticket.comentario}</p>
                     <p><strong>Archivo:</strong> {ticket.archivo}</p>
@@ -141,7 +141,7 @@ export default function AdminTicketsPage() {
                   <div key={ticket.id} style={{ borderBottom: '1px solid #ddd', padding: '10px 0', marginTop: '20px' }}>
                     <h3 style={{ marginBottom: '5px' }}>{ticket.asunto}</h3>
                     <p><strong>Periodo:</strong> {ticket.seccion.periodo.codigo}</p>
-                    <p><strong>Curso:</strong> {ticket.curso_nombre}</p>
+                    <p><strong>Curso:</strong> {ticket.seccion.curso.nombre}</p>
                     <p><strong>Sección:</strong> {ticket.seccion.codigo} - {ticket.seccion.profesor.nombres}</p>
                     <p><strong>Comentario:</strong> {ticket.comentario}</p>
                     <p><strong>Archivo:</strong> {ticket.archivo}</p>
