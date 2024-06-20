@@ -12,6 +12,7 @@ export default function UploadPage({ children }) {
   const [secciones, setSecciones] = useState([]);
   const [asunto, setAsunto] = useState('');
   const [comentario, setComentario] = useState('');
+  const [descripcion, setDescripcion] = useState('');
   const [archivo, setArchivo] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [nombreArchivo, setNombreArchivo] = useState('');
@@ -100,6 +101,7 @@ export default function UploadPage({ children }) {
     formData.append('seccion_id', seccion);
     formData.append('asunto', asunto);
     formData.append('comentario', comentario);
+    formData.append('descripcion', descripcion);
     formData.append('archivo', archivo);
 
     try {
@@ -172,6 +174,10 @@ export default function UploadPage({ children }) {
                     <div style={{ marginBottom: '20px', paddingLeft: '40px'}}>
                         <label style={{ display: 'block', marginBottom: '10px' }}>Comentario:</label>
                         <input type="text" value={comentario} onChange={(e) => setComentario(e.target.value)} style={{ width: '350px' }} />
+                    </div>
+                    <div style={{ marginBottom: '20px', paddingLeft: '40px'}}>
+                        <label style={{ display: 'block', marginBottom: '10px' }}>Descripcion:</label>
+                        <input type="text" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} style={{ width: '350px' }} />
                     </div>
                     <div style={{paddingLeft: '125px', paddingTop: '30px'}}>
                     <button type="submit" style={{ backgroundColor: '#ff6440', borderRadius: '50px', padding: '15px', color: 'white', width: '160px' }} disabled={isSubmitting}>
