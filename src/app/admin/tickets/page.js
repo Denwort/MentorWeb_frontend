@@ -19,7 +19,7 @@ export default function AdminTicketsPage() {
   const obtenerTodosLosTickets = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://127.0.0.1:8000/', {
+      const response = await fetch('http://127.0.0.1:8000/tickets_todos/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ export default function AdminTicketsPage() {
           Todos
         </button>
         <button
-          onClick={() => setFiltro('Pendientes')}
+          onClick={() => setFiltro('Todos')}
           style={{
             margin: '0 10px',
             padding: '10px 20px',
@@ -115,7 +115,6 @@ export default function AdminTicketsPage() {
                     <p><strong>Sección:</strong> {ticket.seccion.codigo} - {ticket.seccion.profesor.nombres}</p>
                     <p><strong>Comentario:</strong> {ticket.comentario}</p>
                     <p><strong>Archivo:</strong> {ticket.archivo}</p>
-                    <p><strong>Fecha de Envío:</strong> {new Date(ticket.fecha_envio).toLocaleString()}</p>
                     <Link href={`./ticketEspecifico?id=${ticket.id}`}>
                       <button style={{ marginTop: '10px', padding: '10px 20px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px' }}>
                         Más información
@@ -145,8 +144,7 @@ export default function AdminTicketsPage() {
                     <p><strong>Sección:</strong> {ticket.seccion.codigo} - {ticket.seccion.profesor.nombres}</p>
                     <p><strong>Comentario:</strong> {ticket.comentario}</p>
                     <p><strong>Archivo:</strong> {ticket.archivo}</p>
-                    <p><strong>Fecha de Envío:</strong> {new Date(ticket.fecha_envio).toLocaleString()}</p>
-                    <p><strong>Estado establecido:</strong> {new Date(ticket.fecha_envio).toLocaleString()}</p>
+                    <p><strong>Estado establecido:</strong> {ticket.estado}</p>
                     <Link href={`./ticketEspecifico?id=${ticket.id}`}>
                       <button style={{ marginTop: '10px', padding: '10px 20px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px' }}>
                         Más información
