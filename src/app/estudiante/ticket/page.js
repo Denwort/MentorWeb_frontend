@@ -1,9 +1,9 @@
 'use client';
-import { useMiProvider } from '/src/context/context.js';
 import { useState, useEffect } from 'react';
+import { useMiProvider } from '/src/context/context.js';
+import { useRouter } from 'next/navigation'; // Asegúrate de importar desde 'next/navigation'
 
 export default function UploadPage({ children }) {
-    
   const [periodo, setPeriodo] = useState('');
   const [curso, setCurso] = useState('');
   const [seccion, setSeccion] = useState('');
@@ -18,13 +18,11 @@ export default function UploadPage({ children }) {
   const [nombreArchivo, setNombreArchivo] = useState('');
 
   const { cuenta, setCuenta } = useMiProvider();
+  const router = useRouter(); // Inicializar useRouter
 
-  const estudiante_id = cuenta.persona.id
-  //const archivoPDF = URL.createObjectURL(archivo)
-  //console.log("ide persona: ", estudiante_id)
+  const estudiante_id = cuenta.persona.id;
 
   useEffect(() => {
-    //cargar periodos y cursos al montar el componente
     handleObtenerPeriodos();
     handleObtenerCursos();
   }, []);
@@ -38,14 +36,12 @@ export default function UploadPage({ children }) {
       if (response.ok) {
         const data = await response.json();
         setPeriodos(data);
-        //console.log('Data extraida: ', data);
       } else {
         const error = await response.text();
         alert('Error en la carga de periodos: ' + (error.length < 100 ? error : 'Error'));
       }
     } catch (error) {
       console.error('Error: ', error);
-      console.error('Data extraida: ', data);
     }
   };
 
@@ -58,7 +54,6 @@ export default function UploadPage({ children }) {
       if (response.ok) {
         const data = await response.json();
         setCursos(data);
-        //console.log('Data extraida: ', data);
       } else {
         const error = await response.text();
         alert('Error en la carga de cursos: ' + (error.length < 100 ? error : 'Error'));
@@ -92,7 +87,6 @@ export default function UploadPage({ children }) {
   };
 
   const handleCrearTicket = async (CT) => {
-  
     CT.preventDefault();
     setIsSubmitting(true);
 
@@ -114,6 +108,7 @@ export default function UploadPage({ children }) {
         const data = await response.json();
         console.log('Datos enviados a funcion crear: ', data);
         alert('Archivos y datos enviados exitosamente');
+        router.push('/estudiante/tickets'); // Redirigir después de una subida exitosa
       } else {
         const error = await response.text();
         alert('Error en el envío: ' + (error.length < 100 ? error : 'Error'));
@@ -128,7 +123,6 @@ export default function UploadPage({ children }) {
 
   return (
     <div className="flex-1 p-4">
-
         <div className="flex-container" style={{ display: 'flex', justifyContent: 'space-around', padding: '20px', marginBottom: '20px' }}>
             {/* Primer bloque (Rellenar) */}
             <div className="containerRellenar" style={{ width: '435px', margin: '10px', backgroundColor: '#f0f0f0', marginLeft: '50px'}}>
@@ -203,6 +197,5 @@ export default function UploadPage({ children }) {
             </div>
         </div>
     </div>
-);
-
+  );
 }

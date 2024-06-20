@@ -70,7 +70,6 @@ export default function TicketEspecifico() {
                 <p><strong>Comentario:</strong> {ticket.comentario}</p>
                 <p><strong>Descripcion:</strong> {ticket.descripcion}</p>
                 <p><strong>Archivo:</strong> {ticket.archivo}</p>
-                <p><strong>Fecha de Envío:</strong> {new Date(ticket.fecha_envio).toLocaleString()}</p>
                 <p><strong>Estado establecido:</strong> {ticket.estado}</p>
               </div>
             ))
