@@ -85,7 +85,14 @@ export default function Home() {
                 
               </div>
             </div>
-            
+            <div className="flex items-center justify-center mt-4">
+                <a 
+                  href="/cambioContra" 
+                  className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline text-center"
+                >
+                  Cambio de Contraseña
+                </a>
+              </div>
             </div>
 
           </form>
