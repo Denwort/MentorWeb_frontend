@@ -1,6 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const PopupForm = ({ isVisible, onClose }) => {
+const PopupForm = ({ isVisible, onClose, onSubmit }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(formData);
+  };
+
   if (!isVisible) return null;
 
   return (
@@ -8,14 +26,26 @@ const PopupForm = ({ isVisible, onClose }) => {
       <div style={styles.popup}>
         <button onClick={onClose} style={styles.closeButton}>X</button>
         <h2>Formulario</h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div style={styles.formGroup}>
             <label htmlFor="name">Nombre:</label>
-            <input type="text" id="name" name="name" />
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+            />
           </div>
           <div style={styles.formGroup}>
             <label htmlFor="email">Email:</label>
-            <input type="email" id="email" name="email" />
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+            />
           </div>
           <button type="submit">Enviar</button>
         </form>
@@ -35,6 +65,7 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 1000,
   },
   popup: {
     backgroundColor: 'white',
