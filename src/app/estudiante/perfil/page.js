@@ -94,7 +94,7 @@ export default function Home() {
             <div className="bg-white w-4/5 h-3/5 border-8 border-gray-500 flex flex-col items-center">
                 <div className="w-48 h-48 rounded-full overflow-hidden m-11">
                     <Image
-                        src={info.persona.foto}
+                        src={fotoError}
                         alt={"foto"}
                         width={100}
                         height={100}
