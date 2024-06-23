@@ -5,7 +5,7 @@ import { useMiProvider } from "/src/context/context";
 import React from "react";
 // import ReactPDF from "@react-pdf/renderer";
 // import { PDFViewer } from "@react-pdf/renderer";
-// import DocuPDF from "@/components/sections/DocuPDF.js";
+import PDFViewer from "@/components/sections/PDFViewer.js";
 
 import documentoDB from "../../../api/documento.js";
 
@@ -29,6 +29,7 @@ export default function RepositorioCurso() {
   };
   console.log(fileUrl);
 
+  
   useEffect(() => {
     handleOnLoad();
   }, [id]);
@@ -45,27 +46,11 @@ export default function RepositorioCurso() {
     <div className="pt-8 text-center">
       <h1 className="text-2xl font-bold mb-4">{resultados.nombre}</h1>
       <p className="text-lg mb-6">{resultados.descripcion}</p>
-      <div>
-        <a
-          href={fileUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-500 hover:underline"
-        >
-          Abrir contenido en otra ventana
-        </a>
-      </div>
 
       {/* Tratando de hacer la previsualizacion */}
-      <label
-        style={{ display: "block", marginBottom: "10px", marginTop: "10px" }}
-      >
-        Visualización del archivo:
-      </label>
-      <embed src={fileUrl} type="application/pdf" width="100%" height="500px" />
+      <div className="p-4">
+        <PDFViewer fileUrl={fileUrl} />
+      </div>
     </div>
   );
 }
-
-// https://medium.com/@stheodorejohn/a-guide-to-display-pdf-documents-in-react-bcd9fb0f56b0
-// https://dev.to/ryaddev/pdf-viewer-in-nextjs-134-using-react-pdf-viewer-nom

@@ -18,6 +18,7 @@ export default function RepositorioCurso() {
   const [buscarPeriodo, setBuscarPeriodo] = useState("");
   const [resultados, setResultados] = useState(null);
   const [documentos, setDocumentos] = useState([]);
+  const maxLength = 50; // Limitar la cantidad de caracteres a mostrar
 
   const handleOnLoad = async () => {
     const cursoData = await cursoDB.findAll({ curso_id: id }); //Aun no implementan GET
@@ -100,7 +101,7 @@ export default function RepositorioCurso() {
               key={index}
               className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2"
             >
-              <div className="border border-gray-300 rounded-lg p-4 shadow-md bg-white">
+              <div className="h-48 border border-gray-300 rounded-lg p-4 shadow-md bg-white flex flex-col justify-center items-center">
                 <div className="flex items-center justify-center mb-4">
                   <SVGdocumento className="text-blue-500" />
                 </div>
@@ -109,7 +110,9 @@ export default function RepositorioCurso() {
                     {documento.nombre} - {documento.seccion}
                   </p>
                   <p className="text-sm text-gray-600">
-                    {documento.descripcion}
+                    {documento.descripcion.length > maxLength
+                      ? documento.descripcion.substring(0, maxLength) + "..."
+                      : documento.descripcion}
                   </p>
                 </div>
               </div>
