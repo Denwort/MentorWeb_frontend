@@ -12,6 +12,7 @@ export default function Home() {
     const [info, setInfo] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const[foto, setFoto]= useState();
 
     const obtenerInfoEstudiante = async () => {
         const id = cuenta?.id;
@@ -33,6 +34,8 @@ export default function Home() {
                 const data = await response.json();
                 setInfo(data);
                 console.log("Datos recibidos:", data);
+                console.log(data.persona.foto);
+                setFoto(data.persona.foto);
             } else {
                 const errorText = `Error al obtener la información del estudiante: ${response.statusText}`;
                 console.error(errorText);
@@ -91,10 +94,10 @@ export default function Home() {
 
     return (
         <div className="flex items-center justify-center w-full h-full">
-            <div className="bg-white w-4/5 h-3/5 border-8 border-gray-500 flex flex-col items-center">
-                <div className="w-48 h-48 rounded-full overflow-hidden m-11">
+            <div className="bg-white w-4/5 h-3/5 border-8 border-gray-500 flex">
+                <div className="absolute w-48 h-48 rounded-full overflow-hidden m-11 self-center">
                     <Image
-                        src={fotoError}
+                        src={foto}
                         alt={"foto"}
                         width={100}
                         height={100}
@@ -104,7 +107,7 @@ export default function Home() {
                     />
                 </div>
 
-                <div className="flex-col w-full px-4 mt-4 text-center">
+                <div className="flex-col w-3/4 h-full pl-72 mt-32">
                     {isLoading ? (
                         <div className="mt-4">
                             <p className="text-gray-500 font-bold text-xl">Cargando...</p>
@@ -123,6 +126,9 @@ export default function Home() {
                             </div>
                             <div className="mt-4">
                                 <p className="text-gray-500 font-bold text-xl">Contraseña: *********</p>
+                            </div>
+                            <div className="mt-4">
+                                <p className="text-gray-500 font-bold text-xl">Pregunta de recuperacion: {info.pregunta.texto}</p>
                             </div>
                         </>
                     ) : (
