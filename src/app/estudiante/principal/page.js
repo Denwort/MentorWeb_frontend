@@ -30,6 +30,10 @@ const AsesoriasEstudianteCards = () => {
   const estudiante_id = cuenta.persona.id
 
   const [asesoriasData, setAsesoriasData] = useState([]);
+  const [reload, setReload] = useState(false);
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,7 +49,39 @@ const AsesoriasEstudianteCards = () => {
     };
 
     fetchData();
-  }, []);
+  }, [reload]);
+
+  const handleEliminarReservar = async (reserva_id) => {
+    try {
+        const response = await fetch('http://127.0.0.1:8000/reservarEliminar/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "reserva_id": reserva_id,
+            }),
+        });
+
+        if (response.ok) {
+          console.log('Asesoria Eliminada');
+          setReload(prev => !prev);
+          setPopupMessage('Reserva eliminada exitosamente.');
+          
+            
+        } else {
+            const error = await response.text();
+            alert(error);
+            setPopupMessage(`Error: ${error}`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        setPopupMessage('Error al eliminar la reserva.');
+    } finally {
+      setShowPopup(true);
+      setTimeout(() => setShowPopup(false), 3000);
+    }
+  };
 
   function obtenerFechayHora(startDate, endDate) {
     const daysOfWeek = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
@@ -58,8 +94,8 @@ const AsesoriasEstudianteCards = () => {
     const day = start.getUTCDate();
     const month = months[start.getUTCMonth()];
   
-    const startTime = start.toISOString().substring(11, 16); // Extract HH:mm from ISO string
-    const endTime = end.toISOString().substring(11, 16);     // Extract HH:mm from ISO string
+    const startTime = start.toISOString().substring(11, 16);
+    const endTime = end.toISOString().substring(11, 16);
   
     return [`Día: ${dayOfWeek} ${day} de ${month}`, `Hora: ${startTime}-${endTime}`];
   }
@@ -87,14 +123,29 @@ const AsesoriasEstudianteCards = () => {
                 <p className="text-sm md:text-base text-gray-600 mb-1">{obtenerFechayHora(asesoriaMAIN.asesoria.fecha_inicio, asesoriaMAIN.asesoria.fecha_fin)[1]}</p>
               </div>
             </div>
-            <div className="flex items-center justify-center bg-orange-500 rounded-lg py-2 px-4 text-white absolute bottom-2 right-2">
-              <a href={asesoriaMAIN.asesoria.enlace} target="_blank" rel="noopener noreferrer">
+            <div className="flex flex-row-reverse space-x-4 space-x-reverse">
+              <a href={asesoriaMAIN.asesoria.enlace} target="_blank" rel="noopener noreferrer" className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg">
                 Ingresar
               </a>
+              <button onClick={() => handleEliminarReservar(asesoriaMAIN.id)} className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg">
+                Eliminar
+              </button>
             </div>
           </div>
         ))}
       </div>
+
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="bg-white p-5 rounded-lg shadow-lg">
+            <p className="text-xl">{popupMessage}</p>
+            <button onClick={() => setShowPopup(false)} className="mt-3 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg">
+              Cerrar
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
   
