@@ -27,13 +27,13 @@ export default function Home() {
         const data = await response.json();
         console.log(data);
         setCuenta(data);
-        if(data.persona.tipo == "Estudiante"){
-          router.push('/estudiante/principal');
+        if (data.persona.tipo == "Estudiante") {
+          router.push("/estudiante/principal");
+        } else if (data.persona.tipo == "Administrador") {
+          router.push("/admin/principal");
+        } else if (data.persona.tipo == "Profesor") {
+          router.push("/profesor/principal");
         }
-        else if(data.persona.tipo == "Administrador"){
-          router.push('/admin/principal');
-        }
-        
       } 
       else{
         const error = await response.text();
