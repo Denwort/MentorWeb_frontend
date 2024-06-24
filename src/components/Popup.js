@@ -1,17 +1,85 @@
-import React, { useState } from 'react';
+'use client';
+import { useState, useEffect } from 'react';
+import { useMiProvider } from '/src/context/context';
+import React from 'react';
 
 const PopupForm = ({ isVisible, onClose, onSubmit }) => {
+  const { cuenta } = useMiProvider();
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    password: '',
+    recoveryQuestion: '',
+    recoveryAnswer: '',
+    photo: null,
+    photoPreview: null,
+    photoName: '',
   });
 
+  const obtenerInfoEstudiante = async () => {
+    const id = cuenta?.id;
+    if (!id) {
+        console.error("Cuenta ID no está disponible");
+        return;
+    }
+    setError(null);
+    try {
+        const response = await fetch('http://127.0.0.1:8000/verPerfil/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ "cuenta_id": id }),
+        });
+        if (response.ok) {
+            const data = await response.json();
+            console.log("Datos recibidos pop-up:", data);
+            setFormData({
+              name: data.persona.nombres,
+              email: data.persona.correo,
+              password: data.contrasenha,
+              recoveryQuestion: data.pregunta.texto,
+              recoveryAnswer: data.respuesta,
+              photo: null,
+              photoPreview: data.persona.foto,
+              photoName: '',
+            });
+        } else {
+            const errorText = `Error al obtener la información del estudiante: ${response.statusText}`;
+            console.error(errorText);
+            setError(errorText);
+        }
+    } catch (error) {
+        console.error('Error al obtener la información del estudiante:', error.message);
+        setError(error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (cuenta?.id) {
+        obtenerInfoEstudiante();
+    } else {
+        console.log("Esperando cuenta ID...");
+    }
+  }, [cuenta]);
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    const { name, value, files } = e.target;
+    if (name === 'photo' && files.length > 0) {
+      const file = files[0];
+      setFormData((prevData) => ({
+        ...prevData,
+        photo: file,
+        photoPreview: URL.createObjectURL(file),
+        photoName: file.name,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = (e) => {
@@ -19,73 +87,103 @@ const PopupForm = ({ isVisible, onClose, onSubmit }) => {
     onSubmit(formData);
   };
 
+  const handleCancel = () => {
+    obtenerInfoEstudiante();  // Reset the form data
+    onClose();
+  };
+
   if (!isVisible) return null;
 
   return (
-    <div style={styles.overlay}>
-      <div style={styles.popup}>
-        <button onClick={onClose} style={styles.closeButton}>X</button>
-        <h2>Formulario</h2>
-        <form onSubmit={handleSubmit}>
-          <div style={styles.formGroup}>
-            <label htmlFor="name">Nombre:</label>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+      <div className="bg-white p-6 rounded-lg w-full max-w-3xl relative">
+        <h2 className="text-xl mb-4 text-center">Editar Perfil</h2>
+        <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-6">
+          <div>
+            <div className="mb-4">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nombre:</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email:</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">Contraseña:</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="recoveryQuestion" className="block text-sm font-medium text-gray-700">Pregunta de recuperación:</label>
+              <input
+                type="text"
+                id="recoveryQuestion"
+                name="recoveryQuestion"
+                value={formData.recoveryQuestion}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="recoveryAnswer" className="block text-sm font-medium text-gray-700">Respuesta de recuperación:</label>
+              <input
+                type="text"
+                id="recoveryAnswer"
+                name="recoveryAnswer"
+                value={formData.recoveryAnswer}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+          </div>
+          <div className="mb-4 flex flex-col">
+            <label htmlFor="photo" className="block text-sm font-medium text-gray-700">Foto:</label>
             <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
+              type="file"
+              id="photo"
+              name="photo"
+              accept="image/*"
               onChange={handleChange}
             />
+            {formData.photoPreview && (
+              <div className="mt-4 self-center">
+                <p className="text-sm text-gray-700">{formData.photoName}</p>
+                <img src={formData.photoPreview} alt="Previsualización" className="mt-2 w-48 h-48 object-cover rounded-full shadow-sm" />
+              </div>
+            )}
           </div>
-          <div style={styles.formGroup}>
-            <label htmlFor="email">Email:</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-            />
+          <div className="col-span-2 flex justify-center mt-4 space-x-4">
+            <button type="submit" className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              Guardar
+            </button>
+            <button type="button" onClick={handleCancel} className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+              Cancelar
+            </button>
           </div>
-          <button type="submit">Enviar</button>
         </form>
       </div>
     </div>
   );
-};
-
-const styles = {
-  overlay: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1000,
-  },
-  popup: {
-    backgroundColor: 'white',
-    padding: '20px',
-    borderRadius: '8px',
-    width: '300px',
-    position: 'relative',
-  },
-  closeButton: {
-    position: 'absolute',
-    top: '10px',
-    right: '10px',
-    background: 'none',
-    border: 'none',
-    fontSize: '16px',
-    cursor: 'pointer',
-  },
-  formGroup: {
-    marginBottom: '15px',
-  },
 };
 
 export default PopupForm;
