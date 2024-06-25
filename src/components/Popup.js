@@ -6,6 +6,7 @@ import React from 'react';
 const PopupForm = ({ isVisible, onClose, onSubmit }) => {
   const { cuenta } = useMiProvider();
   const [error, setError] = useState(null);
+  const [foto, setFoto] = useState();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -14,7 +15,6 @@ const PopupForm = ({ isVisible, onClose, onSubmit }) => {
     recoveryAnswer: '',
     photo: null,
     photoPreview: null,
-    photoName: '',
   });
 
   const obtenerInfoEstudiante = async () => {
@@ -34,17 +34,27 @@ const PopupForm = ({ isVisible, onClose, onSubmit }) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Datos recibidos pop-up:", data);
-            setFormData({
-              name: data.persona.nombres,
-              email: data.persona.correo,
-              password: data.contrasenha,
-              recoveryQuestion: data.pregunta.texto,
-              recoveryAnswer: data.respuesta,
-              photo: null,
-              photoPreview: data.persona.foto,
-              photoName: '',
-            });
+            const fetchFile = async () => {
+              try {
+                const response = await fetch(data.persona.foto);
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                setFoto(url);
+                console.log("Datos recibidos pop-up:", data);
+                setFormData({
+                  name: data.persona.nombres,
+                  email: data.persona.correo,
+                  password: data.contrasenha,
+                  recoveryQuestion: data.pregunta.texto,
+                  recoveryAnswer: data.respuesta,
+                  photo: null,
+                  photoPreview: url,
+                });
+              } catch (error) {
+                console.error("Error fetching the file:", error);
+              }
+            };
+            fetchFile();
         } else {
             const errorText = `Error al obtener la información del estudiante: ${response.statusText}`;
             console.error(errorText);
@@ -72,7 +82,6 @@ const PopupForm = ({ isVisible, onClose, onSubmit }) => {
         ...prevData,
         photo: file,
         photoPreview: URL.createObjectURL(file),
-        photoName: file.name,
       }));
     } else {
       setFormData((prevData) => ({
@@ -164,10 +173,10 @@ const PopupForm = ({ isVisible, onClose, onSubmit }) => {
               name="photo"
               accept="image/*"
               onChange={handleChange}
+              className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100"
             />
             {formData.photoPreview && (
               <div className="mt-4 self-center">
-                <p className="text-sm text-gray-700">{formData.photoName}</p>
                 <img src={formData.photoPreview} alt="Previsualización" className="mt-2 w-48 h-48 object-cover rounded-full shadow-sm" />
               </div>
             )}
