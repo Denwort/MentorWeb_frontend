@@ -93,6 +93,12 @@ const PopupForm = ({ isVisible, onClose, onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const { name, email, password, recoveryQuestion, recoveryAnswer } = formData;
+    if (!name || !email || !password || !recoveryQuestion || !recoveryAnswer) {
+      setError('Todos los campos excepto la foto son obligatorios.');
+      return;
+    }
+    setError(null);
     onSubmit(formData);
   };
 
@@ -107,6 +113,7 @@ const PopupForm = ({ isVisible, onClose, onSubmit }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded-lg w-full max-w-3xl relative">
         <h2 className="text-xl mb-4 text-center">Editar Perfil</h2>
+        {error && <div className="text-red-500 text-center mb-4">{error}</div>}
         <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-6">
           <div>
             <div className="mb-4">

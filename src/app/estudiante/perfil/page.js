@@ -76,8 +76,12 @@ export default function Home() {
         if (updatedData.photo) {
             formData.append("foto", updatedData.photo);
         }else{
-            formData.append("foto", info.persona.foto);
+            formData.append("foto", null)
         }
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
+
 
         try {
             const response = await fetch('http://127.0.0.1:8000/editarPerfilEstudiante/', {
