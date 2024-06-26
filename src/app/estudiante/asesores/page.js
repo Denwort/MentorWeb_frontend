@@ -12,44 +12,40 @@ export default function UserAsesores() {
   const [criterio, setCriterio] = useState("keyword"); // Estado para seleccionar el criterio de búsqueda
   const [etiquetas, setEtiquetas] = useState([]);
 
-function handleKeywordChange(e) {
-  setKeyword(e.target.value);
-  if (criterio === "keyword") {
-    handleConsulta([
-      ...etiquetas,
-      { criterio: "keyword", etiqueta: e.target.value },
-    ]);
-  }
-}
-
-function handleCursoChange(e) {
-  setCurso(e.target.value);
-  if (criterio === "curso") {
-    handleConsulta([
-      ...etiquetas,
-      { criterio: "curso", etiqueta: e.target.value },
-    ]);
-  }
-}
-
-function handleCriterioChange(e) {
-  const newCriterio = e.target.value;
-  const etiqueta = criterio === "keyword" ? keyword : curso;
-
-  if (etiqueta.trim() !== "") {
-    setEtiquetas([...etiquetas, { criterio, etiqueta }]);
+  function handleKeywordChange(e) {
+    setKeyword(e.target.value);
   }
 
-  setCriterio(newCriterio);
-  setKeyword("");
-  setCurso("");
-}
+  function handleCursoChange(e) {
+    setCurso(e.target.value);
+  }
 
-function handleEliminarEtiqueta(index) {
-  const nuevasEtiquetas = etiquetas.filter((_, i) => i !== index);
-  setEtiquetas(nuevasEtiquetas);
-  handleConsulta(nuevasEtiquetas);
-}
+  function handleCriterioChange(e) {
+    setCriterio(e.target.value);
+    setKeyword("");
+    setCurso("");
+  }
+
+  function handleBuscar() {
+    const etiqueta = criterio === "keyword" ? keyword : curso;
+
+    if (etiqueta.trim() !== "") {
+      setEtiquetas([...etiquetas, { criterio, etiqueta }]);
+      if (criterio === "keyword") {
+        setKeyword("");
+      } else {
+        setCurso("");
+      }
+    }
+
+    handleConsulta([...etiquetas, { criterio, etiqueta }]);
+  }
+
+  function handleEliminarEtiqueta(index) {
+    const nuevasEtiquetas = etiquetas.filter((_, i) => i !== index);
+    setEtiquetas(nuevasEtiquetas);
+    handleConsulta(nuevasEtiquetas);
+  }
 
 const handleConsulta = async (etiquetas) => {
   try {
@@ -122,7 +118,7 @@ const handleConsulta = async (etiquetas) => {
 
   useEffect(() => {
     handleConsulta(etiquetas);
-  }, [criterio]);
+  }, [etiquetas]);
 
   return (
     <div className="ml-10 md:ml-20">
@@ -141,7 +137,7 @@ const handleConsulta = async (etiquetas) => {
             </select>
           </div>
           {criterio === "keyword" && (
-            <div className="relative w-4/6 mb-4">
+            <div className="relative w-7/12 mb-4">
               <div className="absolute inset-y-0 left-0 grid content-center pl-3 pointer-events-none h-full">
                 <Image src={busqueda} alt="Icono" className="h-6 w-6" />
               </div>
@@ -156,7 +152,7 @@ const handleConsulta = async (etiquetas) => {
             </div>
           )}
           {criterio === "curso" && (
-            <div className="relative w-4/6 mb-4">
+            <div className="relative w-7/12 mb-4">
               <div className="absolute inset-y-0 left-0 grid content-center pl-3 pointer-events-none h-full">
                 <Image src={busqueda} alt="Icono" className="h-6 w-6" />
               </div>
@@ -169,6 +165,14 @@ const handleConsulta = async (etiquetas) => {
               />
             </div>
           )}
+          <div className="relative w-1/6 mb-4">
+            <button
+              className="bg-orange-500 text-white rounded-full px-4 py-2 ml-2"
+              onClick={handleBuscar}
+            >
+              Buscar
+            </button>
+          </div>
         </div>
       </div>
 
