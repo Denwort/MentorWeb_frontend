@@ -3,12 +3,13 @@ import busqueda from "/public/busqueda.webp";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-
+import asesoresDB from "@/api/asesores.js"
 
 export default function UserAsesores() {
   const [keyword, setKeyword] = useState("");
   const [curso, setCurso] = useState("");
   const [resultados, setResultados] = useState([]);
+  const [busqueda, setBusqueda] = useState([]);
   const [criterio, setCriterio] = useState("keyword"); // Estado para seleccionar el criterio de búsqueda
   const [etiquetas, setEtiquetas] = useState([]);
 
@@ -29,49 +30,42 @@ export default function UserAsesores() {
   function handleBuscar() {
     const etiqueta = criterio === "keyword" ? keyword : curso;
 
-    if (etiqueta.trim() !== "") {
-      setEtiquetas([...etiquetas, { criterio, etiqueta }]);
-      if (criterio === "keyword") {
-        setKeyword("");
-      } else {
-        setCurso("");
-      }
+    if (etiqueta.trim() === "") {
+      return; // No hacer nada si la barra de búsqueda está vacía
     }
 
-    handleConsulta([...etiquetas, { criterio, etiqueta }]);
+    const nuevasEtiquetas = [...etiquetas, { criterio, etiqueta }];
+    setEtiquetas(nuevasEtiquetas);
+
+    if (criterio === "keyword") {
+      setKeyword("");
+    } else {
+      setCurso("");
+    }
+
+    filtrarResultados(nuevasEtiquetas);
   }
 
   function handleEliminarEtiqueta(index) {
     const nuevasEtiquetas = etiquetas.filter((_, i) => i !== index);
     setEtiquetas(nuevasEtiquetas);
-    handleConsulta(nuevasEtiquetas);
+    filtrarResultados(nuevasEtiquetas);
   }
 
-const handleConsulta = async (etiquetas) => {
-  try {
-    const keywords = etiquetas
-      .filter((e) => e.criterio === "keyword")
-      .map((e) => e.etiqueta)
-      .join(" ");
-    const cursos = etiquetas
-      .filter((e) => e.criterio === "curso")
-      .map((e) => e.etiqueta)
-      .join(" ");
+  function handleKeyDown(e) {
+    if (e.key === "Enter") {
+      handleBuscar();
+    }
+  }
 
-    const response = await fetch("http://127.0.0.1:8000/profesores/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        keyword: keywords,
-        curso: cursos,
-      }),
+  const handleConsulta = async () => {
+    const asesoresData = await asesoresDB.findAll({
+      keyword: "",
+      curso: "",
     });
 
-    if (response.ok) {
-      const data = await response.json();
-      let ordenado = data.sort((a, b) => {
+    let ordenado = asesoresData
+      .sort((a, b) => {
         const nombreA = a.nombres.toUpperCase();
         const nombreB = b.nombres.toUpperCase();
         if (nombreA < nombreB) {
@@ -81,17 +75,36 @@ const handleConsulta = async (etiquetas) => {
           return 1;
         }
         return 0;
-      });
-      setResultados(ordenado);
-      console.log(ordenado);
-    } else {
-      const error = await response.text();
-      alert(error.length < 100 ? error : "Error");
-    }
-  } catch (error) {
-    console.error("Error:", error);
-  }
-};
+      })
+      .map((objeto) => ({
+        ...objeto,
+        color: getRandomBackgroundColor(),
+      }));
+    setResultados(ordenado);
+    setBusqueda(ordenado);
+    console.log(ordenado);
+  };
+
+  const filtrarResultados = (etiquetas) => {
+    const keywords = etiquetas
+      .filter((e) => e.criterio === "keyword")
+      .map((e) => e.etiqueta.toLowerCase());
+    const cursos = etiquetas
+      .filter((e) => e.criterio === "curso")
+      .map((e) => e.etiqueta.toLowerCase());
+
+    const filtrados = resultados.filter((asesor) => {
+      const nombresIncluye = keywords.every((keyword) =>
+        asesor.nombres.toLowerCase().includes(keyword)
+      );
+      const cursoIncluye = cursos.every((curso) =>
+        asesor.curso.toLowerCase().includes(curso)
+      );
+      return nombresIncluye && cursoIncluye;
+    });
+
+    setBusqueda(filtrados);
+  };
 
   const colors = [
     "#3498db", "#e74c3c", "#2ecc71", "#f39c12",
@@ -117,8 +130,8 @@ const handleConsulta = async (etiquetas) => {
   };
 
   useEffect(() => {
-    handleConsulta(etiquetas);
-  }, [etiquetas]);
+    handleConsulta();
+  }, []);
 
   return (
     <div className="ml-10 md:ml-20">
@@ -147,6 +160,7 @@ const handleConsulta = async (etiquetas) => {
                 type="text"
                 placeholder="Nombre del Asesor..."
                 value={keyword}
+                onKeyDown={handleKeyDown}
                 onChange={handleKeywordChange}
               />
             </div>
@@ -162,6 +176,7 @@ const handleConsulta = async (etiquetas) => {
                 placeholder="Curso..."
                 value={curso}
                 onChange={handleCursoChange}
+                onKeyDown={handleKeyDown}
               />
             </div>
           )}
@@ -189,8 +204,8 @@ const handleConsulta = async (etiquetas) => {
                 : `Curso: ${etiqueta.etiqueta}`}
             </span>
             <button
-              className="text-red-500 font-bold"
               onClick={() => handleEliminarEtiqueta(index)}
+              className="text-red-500 font-bold"
             >
               X
             </button>
@@ -200,11 +215,11 @@ const handleConsulta = async (etiquetas) => {
 
       {/* Resultados de búsqueda */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 bg-white my-1 py-8 px-8 w-full md:w-5/6">
-        {resultados.map((reserva) => (
+        {busqueda.map((reserva) => (
           <Link href={`./asesor/?id=${reserva.id}`} key={reserva.id}>
             <div
               className="relative w-full h-64 flex flex-col items-center justify-center p-4 rounded"
-              style={{ background: getRandomBackgroundColor() }}
+              style={{ background: reserva.color }}
             >
               <div className="absolute top-8 w-24 h-24 bg-white rounded-full overflow-hidden flex items-center justify-center">
                 <Image
@@ -223,7 +238,7 @@ const handleConsulta = async (etiquetas) => {
             </div>
           </Link>
         ))}
-        {resultados.length === 0 && (
+        {busqueda.length === 0 && (
           <div className="text-center mt-4">Sin resultados</div>
         )}
       </div>
