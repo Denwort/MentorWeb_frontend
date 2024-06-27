@@ -12,6 +12,8 @@ export default function Home() {
   const [mostrarPrincipal, setMostrarPrincipal] = useState(true);
   const [mostrarPregunta, setMostrarPregunta] = useState(false);
   const [mostrarNcontra, setMostraNcontra] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [hasError, setHasError] = useState(0);
 
   const enviar = async (id) => {
     try {
@@ -29,11 +31,9 @@ export default function Home() {
         console.log(data["pregunta"]["texto"]);
         setMostrarPrincipal(false)
         setMostrarPregunta(true);        
-      } else {
-        alert("Los datos ingresados son incorrectos");
       }
     } catch (error) {
-      console.error('Error al obtener las asesorías del estudiante:', error.message);
+      console.error('Error al obtener los pregunta del usuario:', error.message);
       throw error;
     }
   };
@@ -55,10 +55,13 @@ export default function Home() {
         alert("Los datos ingresados son incorrectos");
       }
     } catch (error) {
-      console.error('Error al obtener las asesorías del estudiante:', error.message);
+      console.error('Error al obetner respuesta:', error.message);
       throw error;
     }
     
+  };
+  const isFormValid = () => {
+    return hasError==0;
   };
   const nuevaContra = async (id) => {
     console.log(usuario);
@@ -71,18 +74,51 @@ export default function Home() {
         },
         body: JSON.stringify({ "usuario": usuario, "nuevaContrasenia": nuevaContrasenia }),
       });
-      if (response.ok) {
+      if(response.ok){
         const data = await response.json();
         console.log("funciono");
         setMostraNcontra(false);
         setMostrarPrincipal(true);
-        alert("Se ha cambiado la contraseña exitosamente");        
-      } 
+        alert("Se ha cambiado la contraseña exitosamente"); 
+      }else {
+        const error = await response.text();
+        alert(error.length < 100 ? error: 'Error');
+      }
     } catch (error) {
-      console.error('Error al obtener las asesorías del estudiante:', error.message);
+      console.error('Error al obtener nueva contraseniae:', error.message);
       throw error;
     }
     
+  };
+
+  const validatePassword = (value) => {
+    const errors = {};
+
+    if (!/(?=.*[A-Z])/.test(value)) {
+      errors.uppercase = 'Debe contener al menos una mayúscula';
+    }
+
+    if (!/(?=.*[!@#$%^&*])/.test(value)) {
+      errors.specialChar = 'Debe contener al menos un carácter especial';
+    }
+
+    if (!/(?=.*\d)/.test(value)) {
+      errors.number = 'Debe contener al menos un número';
+    }
+
+    return errors;
+  };
+
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+    setNuevaContrasenia(value);
+    const newErrors = validatePassword(value);
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) {
+      setHasError(1);
+    } else {
+      setHasError(0);
+    }
   };
 
   const refreshPage = () => {
@@ -142,9 +178,12 @@ export default function Home() {
                             Nueva Contraseña 
                           </label>
                             <div className="flex items-center justify-center">
-                            <input className="border rounded-full w-11/12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="nuevaContrasenia" type="nuevaContrasenia" placeholder="nuevaContrasenia" value={nuevaContrasenia} onChange={(e) => setNuevaContrasenia(e.target.value)}/>
+                            <input className="border rounded-full w-11/12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="nuevaContrasenia" type="nuevaContrasenia" placeholder="nuevaContrasenia" value={nuevaContrasenia} onChange={(e) => handlePasswordChange(e)}/>
                             </div>
-                          <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline text-center" type="button" onClick={nuevaContra}>
+                            {errors.uppercase && <p className="text-red-500">{errors.uppercase}</p>}
+                            {errors.specialChar && <p className="text-red-500">{errors.specialChar}</p>}
+                            {errors.number && <p className="text-red-500">{errors.number}</p>}
+                          <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline text-center" type="button" onClick={nuevaContra} disabled={!isFormValid()}>
                           Confirmar
                           </button>
                         </div>
