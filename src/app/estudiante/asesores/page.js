@@ -10,62 +10,88 @@ export default function UserAsesores() {
   const [curso, setCurso] = useState("");
   const [resultados, setResultados] = useState([]);
   const [criterio, setCriterio] = useState("keyword"); // Estado para seleccionar el criterio de búsqueda
+  const [etiquetas, setEtiquetas] = useState([]);
 
   function handleKeywordChange(e) {
     setKeyword(e.target.value);
-    if (criterio === "keyword") {
-      handleConsulta(e.target.value, curso);
-    }
   }
 
   function handleCursoChange(e) {
     setCurso(e.target.value);
-    if (criterio === "curso") {
-      handleConsulta(keyword, e.target.value);
-    }
   }
 
   function handleCriterioChange(e) {
     setCriterio(e.target.value);
-    // handleConsulta(keyword, curso); // Mantener la consulta con los valores actuales
+    setKeyword("");
+    setCurso("");
   }
 
-  const handleConsulta = async (clave, curso) => {
-    try {
-      const response = await fetch("http://127.0.0.1:8000/profesores/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          keyword: clave,
-          curso: curso,
-        }),
-      });
+  function handleBuscar() {
+    const etiqueta = criterio === "keyword" ? keyword : curso;
 
-      if (response.ok) {
-        const data = await response.json();
-        let ordenado = data.sort((a, b) => {
-          const nombreA = a.nombres.toUpperCase();
-          const nombreB = b.nombres.toUpperCase();
-          if (nombreA < nombreB) {
-            return -1;
-          }
-          if (nombreA > nombreB) {
-            return 1;
-          }
-          return 0;
-        });
-        setResultados(ordenado);
-        console.log(ordenado);
+    if (etiqueta.trim() !== "") {
+      setEtiquetas([...etiquetas, { criterio, etiqueta }]);
+      if (criterio === "keyword") {
+        setKeyword("");
       } else {
-        const error = await response.text();
-        alert(error.length < 100 ? error : "Error");
+        setCurso("");
       }
-    } catch (error) {
-      console.error("Error:", error);
     }
-  };
+
+    handleConsulta([...etiquetas, { criterio, etiqueta }]);
+  }
+
+  function handleEliminarEtiqueta(index) {
+    const nuevasEtiquetas = etiquetas.filter((_, i) => i !== index);
+    setEtiquetas(nuevasEtiquetas);
+    handleConsulta(nuevasEtiquetas);
+  }
+
+const handleConsulta = async (etiquetas) => {
+  try {
+    const keywords = etiquetas
+      .filter((e) => e.criterio === "keyword")
+      .map((e) => e.etiqueta)
+      .join(" ");
+    const cursos = etiquetas
+      .filter((e) => e.criterio === "curso")
+      .map((e) => e.etiqueta)
+      .join(" ");
+
+    const response = await fetch("http://127.0.0.1:8000/profesores/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        keyword: keywords,
+        curso: cursos,
+      }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      let ordenado = data.sort((a, b) => {
+        const nombreA = a.nombres.toUpperCase();
+        const nombreB = b.nombres.toUpperCase();
+        if (nombreA < nombreB) {
+          return -1;
+        }
+        if (nombreA > nombreB) {
+          return 1;
+        }
+        return 0;
+      });
+      setResultados(ordenado);
+      console.log(ordenado);
+    } else {
+      const error = await response.text();
+      alert(error.length < 100 ? error : "Error");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
 
   const colors = [
     "#3498db", "#e74c3c", "#2ecc71", "#f39c12",
@@ -91,8 +117,8 @@ export default function UserAsesores() {
   };
 
   useEffect(() => {
-    handleConsulta(keyword, curso);
-  }, []);
+    handleConsulta(etiquetas);
+  }, [etiquetas]);
 
   return (
     <div className="ml-10 md:ml-20">
@@ -111,7 +137,7 @@ export default function UserAsesores() {
             </select>
           </div>
           {criterio === "keyword" && (
-            <div className="relative w-4/6 mb-4">
+            <div className="relative w-7/12 mb-4">
               <div className="absolute inset-y-0 left-0 grid content-center pl-3 pointer-events-none h-full">
                 <Image src={busqueda} alt="Icono" className="h-6 w-6" />
               </div>
@@ -126,8 +152,8 @@ export default function UserAsesores() {
             </div>
           )}
           {criterio === "curso" && (
-            <div className="relative w-4/6">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <div className="relative w-7/12 mb-4">
+              <div className="absolute inset-y-0 left-0 grid content-center pl-3 pointer-events-none h-full">
                 <Image src={busqueda} alt="Icono" className="h-6 w-6" />
               </div>
               <input
@@ -139,7 +165,37 @@ export default function UserAsesores() {
               />
             </div>
           )}
+          <div className="relative w-1/6 mb-4">
+            <button
+              className="bg-orange-500 text-white rounded-full px-4 py-2 ml-2"
+              onClick={handleBuscar}
+            >
+              Buscar
+            </button>
+          </div>
         </div>
+      </div>
+
+      {/* Etiquetas */}
+      <div className="mt-4 flex flex-wrap">
+        {etiquetas.map((etiqueta, index) => (
+          <div
+            key={index}
+            className="flex items-center bg-gray-200 rounded-full px-3 py-1 mr-2 mb-2"
+          >
+            <span className="mr-2">
+              {etiqueta.criterio === "keyword"
+                ? `Nombre: ${etiqueta.etiqueta}`
+                : `Curso: ${etiqueta.etiqueta}`}
+            </span>
+            <button
+              className="text-red-500 font-bold"
+              onClick={() => handleEliminarEtiqueta(index)}
+            >
+              X
+            </button>
+          </div>
+        ))}
       </div>
 
       {/* Resultados de búsqueda */}
