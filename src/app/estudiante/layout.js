@@ -6,8 +6,10 @@ import ojo from "/public/ojo.png";
 import curso from "/public/curso.png";
 import persona from "/public/persona.webp";
 import marcador from "/public/marcador.png";
+import perfil from "/public/perfil.png";
 import { useMiProvider } from '@/context/context';
-import { usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation';
+
 
 export default function DashboardLayout({ children }) {
   const router = useRouter();
@@ -61,6 +63,13 @@ export default function DashboardLayout({ children }) {
             >
                 <Image src={curso} alt="Icono" className="h-6 w-6 mr-2" />
                 <span className="truncate">Cursos</span>
+            </div>
+            <div
+                onClick={() => handleNavigation("/estudiante/perfil")}
+                className={`cursor-pointer flex items-center py-2 px-4 ${activePage === "/estudiante/perfil" ? "bg-orange-500 text-white rounded-r-full" : "text-black hover:bg-orange-500 hover:text-white hover:rounded-r-full"}`}
+            >
+                <Image src={perfil} alt="Icono" className="h-6 w-6 mr-2" />
+                <span className="truncate">Perfil</span>
             </div>
             <div
                 onClick={() => handleNavigation("/estudiante/tickets")}

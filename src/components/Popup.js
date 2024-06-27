@@ -7,6 +7,7 @@ const PopupForm = ({ isVisible, onClose, onSubmit }) => {
   const { cuenta } = useMiProvider();
   const [error, setError] = useState(null);
   const [foto, setFoto] = useState();
+  const [preguntas, setPreguntas] = useState();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -45,7 +46,7 @@ const PopupForm = ({ isVisible, onClose, onSubmit }) => {
                   name: data.persona.nombres,
                   email: data.persona.correo,
                   password: data.contrasenha,
-                  recoveryQuestion: data.pregunta.texto,
+                  recoveryQuestion: data.pregunta.id,
                   recoveryAnswer: data.respuesta,
                   photo: null,
                   photoPreview: url,
@@ -151,14 +152,18 @@ const PopupForm = ({ isVisible, onClose, onSubmit }) => {
             </div>
             <div className="mb-4">
               <label htmlFor="recoveryQuestion" className="block text-sm font-medium text-gray-700">Pregunta de recuperación:</label>
-              <input
-                type="text"
+              <select
                 id="recoveryQuestion"
                 name="recoveryQuestion"
                 value={formData.recoveryQuestion}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              />
+              >
+                <option value="">Seleccione una pregunta</option>
+                <option value="1">¿Profesor favorito?</option>
+                <option value="2">¿Año de nacimiento?</option>
+                <option value="2">¿Nombre de tu primera mascota?</option>
+              </select>
             </div>
             <div className="mb-4">
               <label htmlFor="recoveryAnswer" className="block text-sm font-medium text-gray-700">Respuesta de recuperación:</label>
