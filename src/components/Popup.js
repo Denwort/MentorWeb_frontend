@@ -162,7 +162,7 @@ const PopupForm = ({ isVisible, onClose, onSubmit }) => {
                 <option value="">Seleccione una pregunta</option>
                 <option value="1">¿Profesor favorito?</option>
                 <option value="2">¿Año de nacimiento?</option>
-                <option value="2">¿Nombre de tu primera mascota?</option>
+                <option value="3">¿Nombre de tu primera mascota?</option>
               </select>
             </div>
             <div className="mb-4">
