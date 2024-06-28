@@ -67,9 +67,9 @@ export default function Home() {
         console.log(updatedData.photo)
         const formData = new FormData();
         formData.append("cuenta_id", id);
-        formData.append("usuario", updatedData.email);
+        formData.append("usuario", info.usuario);
         formData.append("contrasenha", updatedData.password);
-        formData.append("pregunta_id", 1);
+        formData.append("pregunta_id", updatedData.recoveryQuestion);
         formData.append("respuesta", updatedData.recoveryAnswer);
         formData.append("nombres", updatedData.name);
         formData.append("correo", updatedData.email);
