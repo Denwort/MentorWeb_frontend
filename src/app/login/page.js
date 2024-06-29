@@ -73,6 +73,9 @@ export default function Home() {
               <input className="border rounded-full w-11/12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************" value={password} onChange={(e) => setPassword(e.target.value)}/>
               </div>
             </div>
+            <div className="flex mb-6">
+                <a href="/cambioContra" className="underline">¿Has olvidado tu contraseña?</a>
+            </div>
 
             <div className="flex items-center justify-center ">
               <div className='grid row-cols-2 gap-4'>
@@ -85,14 +88,6 @@ export default function Home() {
                 
               </div>
             </div>
-            <div className="flex items-center justify-center mt-4">
-                <a 
-                  href="/cambioContra" 
-                  className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline text-center"
-                >
-                  Cambio de Contraseña
-                </a>
-              </div>
             </div>
 
           </form>

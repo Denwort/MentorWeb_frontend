@@ -153,8 +153,12 @@ export default function Home() {
                         <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline text-center" type="button" onClick={enviar}>
                         Cambio de Contraseña
                       </button>
+                      <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-10 rounded-full focus:outline-none focus:shadow-outline text-center" type="button" onClick={refreshPage}>
+                            Cancelar
+                        </button>
                       </div>
                   </div>
+                  
                 </div>)}
                       {mostrarPregunta && (
                       <div className="flex items-center justify-center">
@@ -165,9 +169,14 @@ export default function Home() {
                         <div className="flex items-center justify-center">
                           <input className="border rounded-full w-11/12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="respuesta" type="respuesta" placeholder="respuesta" value={respuesta} onChange={(e) => setRespuesta(e.target.value)}/>
                         </div>
+                        <div className='grid row-cols-2 gap-4'>
                         <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline text-center" type="button" onClick={respuestaPregunta}>
                             Recuperar contraseña
                         </button>
+                        <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-10 rounded-full focus:outline-none focus:shadow-outline text-center" type="button" onClick={refreshPage}>
+                            Cancelar
+                        </button>
+                        </div>
                         </div>
                       </div>)}
 
@@ -183,19 +192,16 @@ export default function Home() {
                             {errors.uppercase && <p className="text-red-500">{errors.uppercase}</p>}
                             {errors.specialChar && <p className="text-red-500">{errors.specialChar}</p>}
                             {errors.number && <p className="text-red-500">{errors.number}</p>}
+                            <div className='grid row-cols-2 gap-4'>   
                           <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline text-center" type="button" onClick={nuevaContra} disabled={!isFormValid()}>
                           Confirmar
                           </button>
+                          <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-10 rounded-full focus:outline-none focus:shadow-outline text-center" type="button" onClick={refreshPage}>
+                            Cancelar
+                          </button>
+                          </div>
                         </div>
                       </div>)}
-                      <div className="flex items-center justify-center mt-4">
-                      <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline text-center" type="button" onClick={refreshPage}>
-                      Cancelar
-                      </button>
-                      <a href="/login" className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline text-center">
-                      Regresar  
-                      </a>
-                      </div>
               </form>
             </div>  
           </div>
