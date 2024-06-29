@@ -70,10 +70,9 @@ export default function DashboardLayout({ children }) {
               ? "bg-orange-500 text-white rounded-r-full"
               : "text-black hover:bg-orange-500 hover:text-white hover:rounded-r-full"
           }`}
-
         >
-          <Image src={secciones} alt="Icono" className="h-6 w-6 mr-2" />
-          <span className="truncate">Mostrar secciones</span>
+          <Image src={curso} alt="Icono" className="h-6 w-6 mr-2" />
+          <span className="truncate">Eliminar asesoria</span>
         </div>
         {/* Cerar sesion */}
         <button
