@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useMiProvider } from '/src/context/context.js';
-import { useRouter } from 'next/navigation'; // Asegúrate de importar desde 'next/navigation'
+import { useRouter } from 'next/navigation';
 
 export default function UploadPage({ children }) {
   const [periodo, setPeriodo] = useState('');
@@ -16,9 +16,10 @@ export default function UploadPage({ children }) {
   const [archivo, setArchivo] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [nombreArchivo, setNombreArchivo] = useState('');
+  const [fileType, setFileType] = useState('');
 
   const { cuenta, setCuenta } = useMiProvider();
-  const router = useRouter(); // Inicializar useRouter
+  const router = useRouter();
 
   const estudiante_id = cuenta.persona.id;
 
@@ -121,81 +122,132 @@ export default function UploadPage({ children }) {
     }
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setArchivo(file);
+    setNombreArchivo(file.name);
+    setFileType(file.type);
+  };
+
   return (
-    <div className="flex-1 p-4">
-        <div className="flex-container" style={{ display: 'flex', justifyContent: 'space-around', padding: '20px', marginBottom: '20px' }}>
-            {/* Primer bloque (Rellenar) */}
-            <div className="containerRellenar" style={{ width: '435px', margin: '10px', backgroundColor: '#f0f0f0', marginLeft: '50px'}}>
-                <h2 className="subtitle" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#858585', marginBottom: '20px', textAlign: 'center'}}>
-                    Creación de ticket
-                </h2>
-
-                <div style={{ marginBottom: '20px', width: '170px', paddingLeft: '40px'}}>
-                    <label style={{ display: 'block', marginBottom: '10px' }}>Periodo:</label>
-                    <select value={periodo} onChange={(e) => setPeriodo(e.target.value)} onBlur={handleObtenerPeriodos} style={{ width: '350px' }}>
-                        <option value="">Selecciona un periodo</option>
-                        {periodos.map((p) => (
-                            <option key={p.id} value={p.id}>{p.codigo}</option>
-                        ))}
-                    </select>
-                </div>
-
-                <div style={{ marginBottom: '20px', width: '170px', paddingLeft: '40px'}}>
-                    <label style={{ display: 'block', marginBottom: '10px' }}>Curso:</label>
-                    <select value={curso} onChange={(e) => setCurso(e.target.value)} onBlur={handleObtenerSecciones} style={{ width: '350px' }}>
-                        <option value="">Selecciona un curso</option>
-                        {cursos.map((c) => (
-                            <option key={c.id} value={c.id}>{c.nombre}</option>
-                        ))}
-                    </select>
-                </div>
-
-                <form onSubmit={handleCrearTicket} style={{width: '190px'}}>
-                    <div style={{ marginBottom: '20px', paddingLeft: '40px'}}>
-                        <label style={{ display: 'block', marginBottom: '10px' }}>Sección:</label>
-                        <select value={seccion} onChange={(e) => setSeccion(e.target.value) } style={{ width: '350px' }}>
-                            <option value="">Selecciona una sección</option>
-                            {secciones.map((s) => (
-                                <option key={s.id} value={s.id}>{s.codigo} - {s.profesor.nombres}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div style={{ marginBottom: '20px', paddingLeft: '40px'}}>
-                        <label style={{ display: 'block', marginBottom: '10px' }}>Asunto:</label>
-                        <input type="text" value={asunto} onChange={(e) => setAsunto(e.target.value)} style={{ width: '350px', display: 'center' }} />
-                    </div>
-
-                    <div style={{ marginBottom: '20px', paddingLeft: '40px'}}>
-                        <label style={{ display: 'block', marginBottom: '10px' }}>Comentario:</label>
-                        <input type="text" value={comentario} onChange={(e) => setComentario(e.target.value)} style={{ width: '350px' }} />
-                    </div>
-                    <div style={{ marginBottom: '20px', paddingLeft: '40px'}}>
-                        <label style={{ display: 'block', marginBottom: '10px' }}>Descripcion:</label>
-                        <input type="text" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} style={{ width: '350px' }} />
-                    </div>
-                    <div style={{paddingLeft: '125px', paddingTop: '30px'}}>
-                    <button type="submit" style={{ backgroundColor: '#ff6440', borderRadius: '50px', padding: '15px', color: 'white', width: '160px' }} disabled={isSubmitting}>
-                        {isSubmitting ? 'Subiendo...' : 'Subir'}
-                    </button>
-                    </div>
-                </form>
+    <div className="min-h-screen flex flex-col items-center p-8">
+      <div className="w-full max-w-7xl">
+        <h2 className="text-2xl font-bold mb-5 text-center text-gray-800">Creación de ticket</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* Primer bloque (Rellenar) */}
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <div className="mb-5">
+              <label className="block mb-2 text-gray-700">Periodo:</label>
+              <select 
+                value={periodo} 
+                onChange={(e) => setPeriodo(e.target.value)} 
+                onBlur={handleObtenerPeriodos} 
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Selecciona un periodo</option>
+                {periodos.map((p) => (
+                  <option key={p.id} value={p.id}>{p.codigo}</option>
+                ))}
+              </select>
             </div>
 
-            {/* Segundo bloque (Loddel PDF) */}
-            <div className="containerPDF" style={{ width: '400px', marginLeft: '10px', backgroundColor: '#f0f0f0', alignItems: 'center', marginRight: '50px'}}>
-                <div>
-                <input type="file" onChange={(e) => {
-                    setArchivo(e.target.files[0])
-                    setNombreArchivo(e.target.files[0].name);
-                }} />
-                    <label style={{ display: 'block', marginBottom: '10px', marginTop: '10px' }}>Visualización del archivo:</label>
-                    <embed src={archivo ? URL.createObjectURL(archivo) : ''} type="application/pdf" width="100%" height="500px" />
-                    <div style={{ border: '2px solid black', padding: '20px' }}>
-                        <label style={{ display: 'block', marginBottom: '10px', marginTop: '10px' }}>Nombre del archivo: {nombreArchivo}</label>
-                    </div>
-                </div>
+            <div className="mb-5">
+              <label className="block mb-2 text-gray-700">Curso:</label>
+              <select 
+                value={curso} 
+                onChange={(e) => setCurso(e.target.value)} 
+                onBlur={handleObtenerSecciones} 
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Selecciona un curso</option>
+                {cursos.map((c) => (
+                  <option key={c.id} value={c.id}>{c.nombre}</option>
+                ))}
+              </select>
             </div>
+
+            <form onSubmit={handleCrearTicket}>
+              <div className="mb-5">
+                <label className="block mb-2 text-gray-700">Sección:</label>
+                <select 
+                  value={seccion} 
+                  onChange={(e) => setSeccion(e.target.value)} 
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Selecciona una sección</option>
+                  {secciones.map((s) => (
+                    <option key={s.id} value={s.id}>{s.codigo} - {s.profesor.nombres}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="mb-5">
+                <label className="block mb-2 text-gray-700">Asunto:</label>
+                <input 
+                  type="text" 
+                  value={asunto} 
+                  onChange={(e) => setAsunto(e.target.value)} 
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div className="mb-5">
+                <label className="block mb-2 text-gray-700">Comentario:</label>
+                <input 
+                  type="text" 
+                  value={comentario} 
+                  onChange={(e) => setComentario(e.target.value)} 
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div className="mb-5">
+                <label className="block mb-2 text-gray-700">Descripcion:</label>
+                <input 
+                  type="text" 
+                  value={descripcion} 
+                  onChange={(e) => setDescripcion(e.target.value)} 
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div className="flex justify-center">
+                <button 
+                  type="submit" 
+                  className="bg-orange-500 text-white py-3 px-6 rounded-full hover:bg-orange-600 transition-colors duration-300 shadow-lg" 
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Subiendo...' : 'Subir'}
+                </button>
+              </div>
+            </form>
+          </div>
+
+          {/* Segundo bloque (Carga del PDF) */}
+          <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
+            <input 
+              type="file" 
+              onChange={handleFileChange} 
+              className="mb-5"
+            />
+            <label className="block text-gray-700 mb-2">Visualización del archivo:</label>
+            {fileType === 'application/pdf' || !fileType ? (
+              <embed 
+                src={archivo ? URL.createObjectURL(archivo) : ''} 
+                type="application/pdf" 
+                width="100%" 
+                height="500px" 
+                className="mb-5"
+              />
+            ) : (
+              <p className="text-gray-500 mb-5">Archivo subido: {nombreArchivo}</p>
+            )}
+            <div className="border-2 border-gray-300 p-4 rounded-lg w-full text-center">
+              <label className="block text-gray-700">Nombre del archivo: {nombreArchivo}</label>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
   );
 }
