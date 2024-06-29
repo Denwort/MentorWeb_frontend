@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation'; // Asegúrate de importar desde 'next/navigation'
+import { useRouter } from 'next/navigation';
 
 export default function TicketEspecifico() {
   const searchParams = useSearchParams();
@@ -14,7 +14,7 @@ export default function TicketEspecifico() {
   const [descripcion, setDescripcion] = useState('');
   const [showAcceptForm, setShowAcceptForm] = useState(false);
   const [showRejectForm, setShowRejectForm] = useState(false);
-  const router = useRouter(); // Inicializar useRouter
+  const router = useRouter();
 
   useEffect(() => {
     if (ticketId) {
@@ -55,15 +55,14 @@ export default function TicketEspecifico() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 'ticket_id': ticketId, 'comentario': comentario, 'nombre': nombre, 'descripcion': descripcion }), //Para pasar lo que pide la funcion
+        body: JSON.stringify({ 'ticket_id': ticketId, 'comentario': comentario, 'nombre': nombre, 'descripcion': descripcion }),
       });
 
       if (response.ok) {
         const data = await response.json();
         console.log('Ticket aceptado: ', data);
-        router.push('/admin/tickets'); // Redirigir después de una subida exitosa
-        // Actualizar el estado del ticket después de aceptar
-        setTicket(prevTicket => ({ ...prevTicket, estado: 'Aceptado', comentario, asunto: nombre, descripcion })); //Para que cambie el asunto del ticket
+        router.push('/admin/tickets');
+        setTicket(prevTicket => ({ ...prevTicket, estado: 'Aceptado', comentario, asunto: nombre, descripcion }));
       } else {
         const error = await response.text();
         console.log('Error al aceptar el ticket: ', error);
@@ -86,8 +85,7 @@ export default function TicketEspecifico() {
       if (response.ok) {
         const data = await response.json();
         console.log('Ticket rechazado: ', data);
-        router.push('/admin/tickets'); // Redirigir después de una subida exitosa
-        // Actualizar el estado del ticket después de rechazar
+        router.push('/admin/tickets');
         setTicket(prevTicket => ({ ...prevTicket, estado: 'Rechazado', comentario }));
       } else {
         const error = await response.text();
@@ -113,41 +111,51 @@ export default function TicketEspecifico() {
   };
 
   return (
-    <div className="flex-1 p-4">
+    <div className="min-h-screen flex flex-col items-center p-8">
       {isLoading ? (
         <p>Cargando ticket...</p>
       ) : ticket ? (
-        <div style={{ width: '80%', backgroundColor: '#f0f0f0', padding: '20px', borderRadius: '10px', margin: '0 auto' }}>
-          <h2 style={{ marginBottom: '10px' }}>{ticket.asunto}</h2>
-          <p><strong>Periodo:</strong> {ticket.seccion.periodo.codigo}</p>
-          <p><strong>Curso:</strong> {ticket.seccion.curso.nombre}</p>
-          <p><strong>Sección:</strong> {ticket.seccion.codigo} - {ticket.seccion.profesor.nombres}</p>
-          <p><strong>Comentario:</strong> {ticket.comentario}</p>
-          <p><strong>Descripcion:</strong> {ticket.descripcion}</p>
-          <p><strong>Archivo:</strong> <a href={`http://127.0.0.1:8000${ticket.archivo}`} download>{getFileName(ticket.archivo)}</a></p>
-          <p><strong>Estado establecido:</strong> {ticket.estado}</p>
+        <div className="bg-white p-6 rounded-lg shadow-md transition-transform transform hover:scale-105 w-full max-w-7xl">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-bold text-gray-800">{ticket.asunto}</h2>
+            <span className={`py-1 px-3 rounded-full text-sm ${
+              ticket.estado === 'Aceptado' ? 'bg-green-100 text-green-800' :
+              ticket.estado === 'Pendiente' ? 'bg-yellow-100 text-yellow-800' :
+              ticket.estado === 'Rechazado' ? 'bg-red-100 text-red-800' : ''
+            }`}>
+              {ticket.estado}
+            </span>
+          </div>
+          <div className="text-gray-700">
+            <p><strong>Periodo:</strong> {ticket.seccion.periodo.codigo}</p>
+            <p><strong>Curso:</strong> {ticket.seccion.curso.nombre}</p>
+            <p><strong>Sección:</strong> {ticket.seccion.codigo} - {ticket.seccion.profesor.nombres}</p>
+            <p><strong>Comentario:</strong> {ticket.comentario}</p>
+            <p><strong>Descripcion:</strong> {ticket.descripcion}</p>
+            <p><strong>Archivo:</strong> <a href={`http://127.0.0.1:8000${ticket.archivo}`} download className="text-blue-500 hover:underline">{getFileName(ticket.archivo)}</a></p>
+          </div>
 
-          <div style={{ marginTop: '20px' }}>
+          <div className="mt-4">
             {ticket.estado === 'Pendiente' && !showAcceptForm && !showRejectForm && (
-              <>
+              <div className="flex space-x-4">
                 <button
                   onClick={handleAcceptClick}
-                  style={{ marginTop: '10px', padding: '10px 20px', backgroundColor: '#28a745', color: '#fff', border: 'none', borderRadius: '5px', marginRight: '10px' }}
+                  className="mt-4 py-2 px-4 rounded-full bg-green-500 text-white hover:bg-green-600 transition-colors duration-300"
                 >
                   Aceptar
                 </button>
                 <button
                   onClick={handleRechazarClick}
-                  style={{ marginTop: '10px', padding: '10px 20px', backgroundColor: '#dc3545', color: '#fff', border: 'none', borderRadius: '5px' }}
+                  className="mt-4 py-2 px-4 rounded-full bg-red-500 text-white hover:bg-red-600 transition-colors duration-300"
                 >
                   Rechazar
                 </button>
                 <Link href="/admin/tickets">
-                  <button style={{ marginLeft: '10px', marginTop: '10px', padding: '10px 20px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px' }}>
+                  <button className="mt-4 py-2 px-4 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-300">
                     Volver
                   </button>
                 </Link>
-              </>
+              </div>
             )}
 
             {showAcceptForm && (
@@ -156,23 +164,23 @@ export default function TicketEspecifico() {
                   placeholder="Nombre del documento"
                   value={nombre}
                   onChange={(e) => setNombre(e.target.value)}
-                  style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
                 />
                 <textarea
                   placeholder="Comentario"
                   value={comentario}
                   onChange={(e) => setComentario(e.target.value)}
-                  style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
                 />
                 <textarea
                   placeholder="Descripción del documento"
                   value={descripcion}
                   onChange={(e) => setDescripcion(e.target.value)}
-                  style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
                 />
                 <button
                   onClick={aceptarTicket}
-                  style={{ marginTop: '10px', padding: '10px 20px', backgroundColor: '#28a745', color: '#fff', border: 'none', borderRadius: '5px', marginRight: '10px' }}
+                  className="mt-4 py-2 px-4 rounded-full bg-green-500 text-white hover:bg-green-600 transition-colors duration-300"
                 >
                   Confirmar Aceptación
                 </button>
@@ -185,11 +193,11 @@ export default function TicketEspecifico() {
                   placeholder="Comentario"
                   value={comentario}
                   onChange={(e) => setComentario(e.target.value)}
-                  style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
                 />
                 <button
                   onClick={rechazarTicket}
-                  style={{ marginTop: '10px', padding: '10px 20px', backgroundColor: '#dc3545', color: '#fff', border: 'none', borderRadius: '5px', marginRight: '10px' }}
+                  className="mt-4 py-2 px-4 rounded-full bg-red-500 text-white hover:bg-red-600 transition-colors duration-300"
                 >
                   Confirmar Rechazo
                 </button>
@@ -198,7 +206,7 @@ export default function TicketEspecifico() {
 
             {(ticket.estado !== 'Pendiente' || showAcceptForm || showRejectForm) && (
               <Link href="/admin/tickets">
-                <button style={{ marginLeft: '10px', marginTop: '10px', padding: '10px 20px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px' }}>
+                <button className="mt-4 py-2 px-4 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-300">
                   Volver
                 </button>
               </Link>

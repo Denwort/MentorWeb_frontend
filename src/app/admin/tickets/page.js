@@ -8,7 +8,7 @@ export default function AdminTicketsPage() {
   const [filtro, setFiltro] = useState('Pendientes');
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const ticketsPerPage = 2;
+  const ticketsPerPage = 4;
 
   useEffect(() => {
     if (filtro === 'Todos') {
@@ -84,90 +84,74 @@ export default function AdminTicketsPage() {
   };
 
   return (
-    <div className="flex-1 p-4">
-      <h1 className="title" style={{ fontSize: '2rem', fontWeight: 'bold', color: '#333', marginBottom: '20px', textAlign: 'center' }}>
-        Visualización de Tickets
-      </h1>
-      {/* Botones */}
-      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+    <div className="min-h-screen flex flex-col items-center p-8">
+      <h1 className="text-2xl font-bold mb-5">Visualización de Tickets</h1>
+      <div className="flex justify-center mb-8">
         <button
           onClick={() => { setFiltro('Todos'); setCurrentPage(1); }}
-          style={{
-            margin: '0 10px',
-            padding: '10px 20px',
-            backgroundColor: filtro === 'Todos' ? '#ff6440' : '#ddd',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '5px',
-          }}
+          className={`py-2 px-4 rounded-l-full border-r-0 ${filtro === 'Todos' ? 'bg-orange-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
         >
           Todos
         </button>
         <button
           onClick={() => { setFiltro('Pendientes'); setCurrentPage(1); }}
-          style={{
-            margin: '0 10px',
-            padding: '10px 20px',
-            backgroundColor: filtro === 'Pendientes' ? '#ff6440' : '#ddd',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '5px',
-          }}
+          className={`py-2 px-4 rounded-r-full ${filtro === 'Pendientes' ? 'bg-orange-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
         >
           Pendientes
         </button>
       </div>
-      <div className="flex-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px' }}>
-        {isLoading ? (
-          <p>Cargando tickets...</p>
-        ) : (
-          currentTickets.length === 0 ? (
-            <p>No hay tickets disponibles.</p>
-          ) : (
-            <div style={{ width: '80%', backgroundColor: '#f0f0f0', padding: '20px', borderRadius: '10px'}}>
-              {currentTickets.map(ticket => (
-                <div key={ticket.id} style={{ borderBottom: '1px solid #ddd', padding: '20px', marginBottom: '30px', backgroundColor: '#fff', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'}}>
-                  <h3 style={{ marginBottom: '10px' }}>{ticket.asunto}</h3>
-                  <p><strong>Periodo:</strong> {ticket.seccion.periodo.codigo}</p>
-                  <p><strong>Curso:</strong> {ticket.seccion.curso.nombre}</p>
-                  <p><strong>Sección:</strong> {ticket.seccion.codigo} - {ticket.seccion.profesor.nombres}</p>
-                  <p><strong>Comentario:</strong> {ticket.comentario}</p>
-                  <p><strong>Descripcion:</strong> {ticket.descripcion}</p>
-                  <p><strong>Archivo:</strong> <a href={`http://127.0.0.1:8000${ticket.archivo}`} download>{getFileName(ticket.archivo)}</a></p>
-                  <p><strong>Estado establecido:</strong> {ticket.estado}</p>
-                  <Link href={`./ticketEspecifico?id=${ticket.id}`}>
-                    <button style={{ marginTop: '10px', padding: '10px 20px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px' }}>
-                      Más información
-                    </button>
-                  </Link>
+
+      {isLoading ? (
+        <p>Cargando tickets...</p>
+      ) : (
+        <div className="w-full max-w-7xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            {currentTickets.length > 0 ? (
+              currentTickets.map(ticket => (
+                <div key={ticket.id} className="bg-white p-6 rounded-lg shadow-md transition-transform transform hover:scale-105">
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-xl font-bold text-gray-800">{ticket.asunto}</h3>
+                    <span className={`py-1 px-3 rounded-full text-sm ${
+                      ticket.estado === 'Aceptado' ? 'bg-green-100 text-green-800' :
+                      ticket.estado === 'Pendiente' ? 'bg-yellow-100 text-yellow-800' :
+                      ticket.estado === 'Rechazado' ? 'bg-red-100 text-red-800' : ''
+                    }`}>
+                      {ticket.estado}
+                    </span>
+                  </div>
+                  <div className="text-gray-700">
+                    <p><strong>Periodo:</strong> {ticket.seccion.periodo.codigo}</p>
+                    <p><strong>Curso:</strong> {ticket.seccion.curso.nombre}</p>
+                    <p><strong>Sección:</strong> {ticket.seccion.codigo} - {ticket.seccion.profesor.nombres}</p>
+                    <p><strong>Comentario:</strong> {ticket.comentario}</p>
+                    <p><strong>Descripcion:</strong> {ticket.descripcion}</p>
+                    <p><strong>Archivo:</strong> <a href={`http://127.0.0.1:8000${ticket.archivo}`} download className="text-blue-500 hover:underline">{getFileName(ticket.archivo)}</a></p>
+                    <Link href={`./ticketEspecifico?id=${ticket.id}`}>
+                      <button className="mt-4 py-2 px-4 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-300">
+                        Más información
+                      </button>
+                    </Link>
+                  </div>
                 </div>
-              ))}
-            </div>
-          )
-        )}
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px'}}>
-        <nav>
-          <ul style={{ display: 'flex', listStyle: 'none', padding: 0 }}>
+              ))
+            ) : (
+              <p>No hay tickets disponibles.</p>
+            )}
+          </div>
+
+          <div className="flex justify-center mt-4 space-x-2">
             {pageNumbers.map(number => (
-              <li key={number} style={{ margin: '0 5px' }}>
-                <button
-                  onClick={() => paginate(number)}
-                  style={{
-                    padding: '10px 15px',
-                    backgroundColor: currentPage === number ? '#007bff' : '#ddd',
-                    color: currentPage === number ? '#fff' : '#000',
-                    border: 'none',
-                    borderRadius: '5px',
-                  }}
-                >
-                  {number}
-                </button>
-              </li>
+              <button
+                key={number}
+                onClick={() => paginate(number)}
+                className={`py-2 px-4 rounded-full ${currentPage === number ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+              >
+                {number}
+              </button>
             ))}
-          </ul>
-        </nav>
-      </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

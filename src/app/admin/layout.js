@@ -35,29 +35,34 @@ export default function DashboardLayout({ children }) {
     router.push(path);
   };
 
-
-  return (
-    <div className="flex h-screen">
-          <nav class="min-w-52 h-screen flex flex-col space-y-4 pr-4 pt-4 bg-[#fdfdfd]">
-            <div
-                onClick={() => handleNavigation("/admin/principal")}
-                className={`cursor-pointer flex items-center py-2 px-4 ${activePage === "/admin/principal" ? "bg-orange-500 text-white rounded-r-full" : "text-black hover:bg-orange-500 hover:text-white hover:rounded-r-full"}`}
-            >
-                <Image src={calendario} alt="Icono" className="h-6 w-6 mr-2" />
-                <span className="truncate">Cargar Horarios</span>
-            </div>
-            <div
-                onClick={() => handleNavigation("/admin/tickets")}
-                className={`cursor-pointer flex items-center py-2 px-4 ${activePage === "/admin/tickets" ? "bg-orange-500 text-white rounded-r-full" : "text-black hover:bg-orange-500 hover:text-white hover:rounded-r-full"}`}
-            >
-                <Image src={marcador} alt="Icono" className="h-6 w-6 mr-2" />
-                <span className="truncate">Tickets</span>
-            </div>
-            <button 
-            className="cursor-pointer py-2 px-4 rounded-full hover:bg-red-400"
-            onClick={()=>{setCuenta(); navigator.push}}>Cerrar sesion</button>
+    return (
+      <div className="flex flex-row">
+          {/* Sidebar */}
+          <nav className="min-w-52 min-h-[calc(100vh-7rem)] flex flex-col space-y-4 pr-4 pt-4 bg-[#fdfdfd]">
+              <div
+                  onClick={() => handleNavigation("/admin/principal")}
+                  className={`cursor-pointer flex items-center py-2 px-4 ${activePage === "/admin/principal" ? "bg-orange-500 text-white rounded-r-full" : "text-black hover:bg-orange-500 hover:text-white hover:rounded-r-full"}`}
+              >
+                  <Image src={calendario} alt="Icono" className="h-6 w-6 mr-2" />
+                  <span className="truncate">Cargar Horarios</span>
+              </div>
+              <div
+                  onClick={() => handleNavigation("/admin/tickets")}
+                  className={`cursor-pointer flex items-center py-2 px-4 ${activePage === "/admin/tickets" ? "bg-orange-500 text-white rounded-r-full" : activePage === "/estudiante/asesor" ? "bg-orange-500 text-white rounded-r-full" : "text-black hover:bg-orange-500 hover:text-white hover:rounded-r-full"}`}
+              >
+                  <Image src={marcador} alt="Icono" className="h-6 w-6 mr-2" />
+                  <span className="truncate">Tickets</span>
+              </div>
+              <button 
+              className="cursor-pointer py-2 px-4 rounded-full hover:bg-red-400"
+              onClick={()=>{setCuenta(); navigator.push}}>Cerrar sesion</button>
           </nav>
-        {children}
-    </div>   
-    )
+
+          {/* Main content */}
+          <main className="flex-grow overflow-y-auto">
+              {children}
+          </main>
+      </div>
+  );
+
 }
