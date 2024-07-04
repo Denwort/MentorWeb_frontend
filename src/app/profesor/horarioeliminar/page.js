@@ -3,51 +3,106 @@ import { useMiProvider } from "/src/context/context.js";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 
-const Asesorias = [
-  {
-    fecha: "14-12-2024",
-    hora: "14:05",
-    curso: "Ciencias del Fracaso",
-    ambiente: "Narnia",
-    seccion: "666",
-    reservas: [
-      { nombre: "Alberto", orden: 1, atendido: false },
-      { nombre: "Juancho", orden: 2, atendido: false },
-    ],
-  },
-  {
-    fecha: "15-12-2024",
-    hora: "10:00",
-    curso: "Soldadura de Manera",
-    ambiente: "Hogwarts",
-    seccion: "101",
-    reservas: [
-      { nombre: "Lucía", orden: 1, atendido: false },
-      { nombre: "Pedro", orden: 2, atendido: false },
-      { nombre: "Esteban", orden: 3, atendido: false },
-    ],
-  },
-  {
-    fecha: "16-12-2024",
-    hora: "12:30",
-    curso: "Historia espacial",
-    ambiente: "Afganistan",
-    seccion: "202",
-    reservas: [
-      { nombre: "Ana", orden: 1, atendido: false },
-      { nombre: "Carlos", orden: 2, atendido: false },
-    ],
-  },
-];
-
 export default function horarioExtraEliminar() {
-  const [asesorias, setAsesorias] = useState(Asesorias);
-  const [mostrarLista, setMostrarLista] = useState(true);
+  const { cuenta, setCuenta } = useMiProvider();
+  const [asesorias, setAsesorias] = useState([]);
 
-  const eliminarAsesoria = (index) => {
-    const nuevasAsesorias = asesorias.filter((_, i) => i !== index);
-    setAsesorias(nuevasAsesorias);
+  // Función para formatear la fecha
+  const formatearFecha = (fechaISO) => {
+    const fecha = new Date(fechaISO);
+    return fecha.toLocaleDateString("es-ES", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
   };
+
+  // Función para formatear la hora
+  const formatearHora = (fechaISO) => {
+    const fecha = new Date(fechaISO);
+    // Ajustar diferencia horaria
+    fecha.setHours(fecha.getHours() + 5);
+    return fecha.toLocaleTimeString("es-ES", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  // Función para transformar cada asesoría
+  const transformarAsesoria = (objeto) => {
+    const primeraAsesoria =
+      objeto.asesorias.length > 0 ? objeto.asesorias : null;
+
+    if (!primeraAsesoria) {
+      return null;
+    }
+
+    let lista = [];
+    for(let i = 0; i<primeraAsesoria.length; i++){
+
+      const fechaFormateada = formatearFecha(primeraAsesoria[i].fecha_inicio);
+      const horaInicioFormateada = formatearHora(primeraAsesoria[i].fecha_inicio);
+      const horaFinFormateada = formatearHora(primeraAsesoria[i].fecha_fin);
+
+    lista.push( {
+      id: primeraAsesoria[i].id,
+      fecha: fechaFormateada,
+      hora_inicio: horaInicioFormateada,
+      hora_fin: horaFinFormateada,
+      curso: objeto.curso.nombre,
+      ambiente: primeraAsesoria.ambiente,
+      seccion: objeto.codigo,
+    })
+    }
+    return lista;
+  };
+
+  // Función principal para manejar la consulta
+  const handleConsulta = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/listar_extras/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          profesor_id: cuenta.persona.id
+        }),
+      });
+      const asesoresData = await response.json();
+      console.log(asesoresData);
+
+      const dataLimpia = asesoresData
+        .map(transformarAsesoria).flat()
+        .filter((item) => item !== null);
+
+      setAsesorias(dataLimpia);
+      console.log(dataLimpia);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const eliminarAsesoria = async (index) => {
+    if (window.confirm("¿Estás seguro de que deseas eliminar esta asesoría?")) {
+      console.log(index);
+    const response = await fetch('http://127.0.0.1:8000/cerrar_extra/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "asesoria_id":  index
+        }),
+      });
+      alert("La asesoría ha sido eliminada exitosamente.");
+    }
+    handleConsulta();
+  };
+
+  useEffect(() => {
+    handleConsulta();
+  }, []);
 
   return (
     <div className="min-h-screen p-6">
@@ -55,19 +110,19 @@ export default function horarioExtraEliminar() {
         <h1 className="text-3xl font-bold text-gray-800 mb-8">
           Eliminar Asesoría
         </h1>
-        {mostrarLista && (<div>
+        <div>
           <ul>
             {asesorias.map((asesoria, index) => (
               <li key={index} className="flex items-center justify-between mb-4 p-4 border border-gray-300 rounded-lg bg-white">
                 <div>
-                  <p className="text-xl font-semibold">{asesoria.fecha} - {asesoria.hora}</p>
+                  <p className="text-xl font-semibold">{asesoria.fecha} - {asesoria.hora_inicio}</p>
                   <p className="text-gray-700">{asesoria.curso} - {asesoria.seccion}</p>
                 </div>
-                <button onClick={() => eliminarAsesoria(index)} className="bg-red-600 text-white rounded-full p-2 hover:bg-red-800 focus:outline-none">X </button>
+                <button onClick={() => eliminarAsesoria(asesoria.id)} className="bg-red-600 text-white rounded-full p-2 hover:bg-red-800 focus:outline-none">X </button>
               </li>
             ))}
           </ul>
-        </div>)}
+        </div>
         
       </div>
     </div>
