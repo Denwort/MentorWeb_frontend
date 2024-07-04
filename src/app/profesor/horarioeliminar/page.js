@@ -4,8 +4,10 @@ import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 
 export default function horarioExtraEliminar() {
-  const { cuenta, setCuenta } = useMiProvider();
+  const {cuenta, setCuenta } = useMiProvider();
   const [asesorias, setAsesorias] = useState([]);
+  const [mostrarPrincipal, setMostrarPrincipal] = useState(true);
+  const [mostrarNoAsesorias, setmostrarNoAsesorias] = useState(false);
 
   // Función para formatear la fecha
   const formatearFecha = (fechaISO) => {
@@ -82,6 +84,7 @@ export default function horarioExtraEliminar() {
       console.error("Error fetching data:", error);
     }
   };
+  
 
   const eliminarAsesoria = async (index) => {
     if (window.confirm("¿Estás seguro de que deseas eliminar esta asesoría?")) {
@@ -98,19 +101,32 @@ export default function horarioExtraEliminar() {
       alert("La asesoría ha sido eliminada exitosamente.");
     }
     handleConsulta();
+    mostrar();
   };
 
   useEffect(() => {
     handleConsulta();
+    mostrar();
   }, []);
+
+  const mostrar = () => {
+    if(asesorias.length == 0){
+      setMostrarPrincipal(false);
+      setmostrarNoAsesorias(true);
+    }
+    else{
+      setMostrarPrincipal(true);
+      setmostrarNoAsesorias(false);
+    }
+  };
 
   return (
     <div className="min-h-screen p-6">
       <div className="container mx-auto">
         <h1 className="text-3xl font-bold text-gray-800 mb-8">
-          Eliminar Asesoría
+          Eliminar Asesorías Extras
         </h1>
-        <div>
+        {mostrarPrincipal && (<div>
           <ul>
             {asesorias.map((asesoria, index) => (
               <li key={index} className="flex items-center justify-between mb-4 p-4 border border-gray-300 rounded-lg bg-white">
@@ -122,8 +138,10 @@ export default function horarioExtraEliminar() {
               </li>
             ))}
           </ul>
-        </div>
-        
+        </div>)}
+        {mostrarNoAsesorias && (<div className="flex flex-col justify-center items-center bg-white p-6 rounded-lg shadow-md">
+          <p> No hay Asesorias Extras</p>
+        </div>)}
       </div>
     </div>
   );
