@@ -53,15 +53,16 @@ export default function DashboardLayout({ children }) {
           <span className="truncate">Overview</span>
         </div>
         <div
-          onClick={() => handleNavigation("/profesor/horarioextra")}
+          onClick={() => handleNavigation("/profesor/seccionesAgregarHorario")}
           className={`cursor-pointer flex items-center py-2 px-4 ${
-            activePage === "/profesor/horarioextra"
+            activePage === "/profesor/seccionesAgregarHorario" ||
+            activePage.startsWith("/profesor/horarioextra/")
               ? "bg-orange-500 text-white rounded-r-full"
               : "text-black hover:bg-orange-500 hover:text-white hover:rounded-r-full"
           }`}
         >
           <Image src={persona} alt="Icono" className="h-6 w-6 mr-2" />
-          <span className="truncate">Agregar asesoria</span>
+          <span className="truncate">Agregar asesoría</span>
         </div>
         <div
           onClick={() => handleNavigation("/profesor/horarioeliminar")}
