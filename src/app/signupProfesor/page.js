@@ -39,7 +39,7 @@ const SignupProfesor = () => {
       <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
         <h2 className="text-2xl font-bold mb-5 text-center text-gray-800">Validación de Correo para Profesores</h2>
         <div className="mb-5">
-          <label className="block mb-2 text-gray-700">Correo:</label>
+          <label className="block mb-2 text-gray-700">Se te enviarán las credenciales a tu correo</label>
           <input
             type="email"
             value={correo}
