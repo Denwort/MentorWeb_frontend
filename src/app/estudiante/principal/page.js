@@ -14,15 +14,19 @@ const obtenerAsesoriasEstudiante = async (id) => {
       },
       body: JSON.stringify({ "estudiante_id": id }),
     });
-    if (!response.ok) {
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Asesorias recientes:', data); // Añadir esta línea para ver los datos
+      return data;
+    } else {
       throw new Error(`Error al obtener las asesorías del estudiante: ${response.statusText}`);
     }
-    return await response.json();
   } catch (error) {
     console.error('Error al obtener las asesorías del estudiante:', error.message);
     throw error;
   }
 };
+
 
 const obtenerDocumentosRecientes = async (estudiante_id) => {
   try {

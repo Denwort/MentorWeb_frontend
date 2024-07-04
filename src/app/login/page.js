@@ -47,17 +47,17 @@ export default function Home() {
   }
 
   return (
-      <div className="flex justify-center items-center  pt-8 ">
+      <div className="flex justify-center items-center pt-8">
         <div className="grid grid-row-2 gap-2 w-2/3">
             <div className="w-full"><h1 className="font-bold ">Login</h1></div>
 
-        <div className=" px-4 py-1 mt-2">
+        <div className="px-4 py-1 mt-2">
           <form className="bg-white shadow-md ">
 
             <div className="grid grid-row-4 px-48 py-32">
 
             <div className="mb-6">
-              <label className="block text-gray-700 text-sm mb-4" >
+              <label className="block text-gray-700 text-sm mb-4">
                 Usuario
               </label>
               <div className="flex items-center justify-center">
@@ -82,9 +82,10 @@ export default function Home() {
                 <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline text-center" type="button" onClick={handleLogin}>
                   Iniciar Sesión
                 </button>
-
                 
                 <a href="/signup" className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline text-center" type="button">Crear Cuenta</a>
+                
+                <a href="/signupProfesor" className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline text-center" type="button">Soy Profesor</a>
                 
               </div>
             </div>
@@ -97,4 +98,4 @@ export default function Home() {
       </div>
     
     )
-  }
+}
