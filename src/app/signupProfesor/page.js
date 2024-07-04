@@ -48,13 +48,21 @@ const SignupProfesor = () => {
             placeholder="Introduce tu correo"
           />
         </div>
-        <button
-          onClick={handleValidarCorreo}
-          className="w-full bg-blue-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-300"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? 'Validando...' : 'Validar Correo'}
-        </button>
+        <div className="flex flex-col space-y-4">
+          <button
+            onClick={handleValidarCorreo}
+            className="w-full bg-blue-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-300"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Validando...' : 'Validar Correo'}
+          </button>
+          <button
+            onClick={() => router.push('/')}
+            className="w-full bg-gray-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors duration-300"
+          >
+            Volver a Inicio
+          </button>
+        </div>
       </div>
     </div>
   );
