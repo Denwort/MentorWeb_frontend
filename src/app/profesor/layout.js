@@ -5,6 +5,7 @@ import Image from "next/image";
 import ojo from "/public/ojo.png";
 import curso from "/public/curso.png";
 import persona from "/public/persona.webp";
+import perfil from "/public/perfil.png";
 import secciones from "/public/secciones.png";
 import { useMiProvider } from "@/context/context";
 import { usePathname } from "next/navigation";
@@ -75,6 +76,13 @@ export default function DashboardLayout({ children }) {
           <Image src={curso} alt="Icono" className="h-6 w-6 mr-2" />
           <span className="truncate">Eliminar asesoria</span>
         </div>
+        <div
+                onClick={() => handleNavigation("/estudiante/perfil")}
+                className={`cursor-pointer flex items-center py-2 px-4 ${activePage === "/profesor/perfil" ? "bg-orange-500 text-white rounded-r-full" : "text-black hover:bg-orange-500 hover:text-white hover:rounded-r-full"}`}
+            >
+                <Image src={perfil} alt="Icono" className="h-6 w-6 mr-2" />
+                <span className="truncate">Perfil</span>
+            </div>
         {/* Cerar sesion */}
         <button
           className="cursor-pointer py-2 px-4 rounded-full hover:bg-red-400"
