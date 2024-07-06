@@ -3,9 +3,13 @@ import { useMiProvider } from "/src/context/context.js";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import listaReservasDB from "../../../api//reservasAsesoriasVistaProfesor.js";
+import PopupAsesorias from "../../../components/sections/PopupAsesoriasProfesor.js"; // Ajusta la ruta según la ubicación de tu archivo
 
 export default function UserAsesores() {
   const [asesorias, setAsesorias] = useState([]);
+  const [isPopupVisible, setPopupVisible] = useState(false);
+  const [selectedAsesoria, setSelectedAsesoria] = useState(null);
+  const { cuenta, setCuenta } = useMiProvider();
 
   // Función para formatear la fecha
   const formatearFecha = (fechaISO) => {
@@ -49,18 +53,25 @@ export default function UserAsesores() {
       ambiente: primeraAsesoria.ambiente,
       seccion: objeto.codigo,
       reservas: primeraAsesoria.reservas.map((reserva, index) => ({
-        nombre: reserva.nombre,
+        codigo: reserva.codigo,
+        nombre: reserva.estudiante.nombres,
+        foto: reserva.estudiante.foto,
+        atendido: false,
         orden: index + 1,
-        atendido: reserva.atendido || false,
       })),
     };
   };
 
   // Función principal para manejar la consulta
   const handleConsulta = async () => {
+    const id_Profe = cuenta?.persona.id;
+    if (!id_Profe) {
+      console.error("Cuenta ID no está disponible");
+      return;
+    }
     try {
       const asesoresData = await listaReservasDB.findAll({
-        profesor_id: 33,
+        profesor_id: id_Profe,
       });
 
       const dataLimpia = asesoresData
@@ -81,10 +92,44 @@ export default function UserAsesores() {
       </div>
     );
   }
-
   useEffect(() => {
     handleConsulta();
   }, []);
+
+  const handleAsesoriaClick = (asesoria) => {
+    setSelectedAsesoria(asesoria);
+    setPopupVisible(true);
+  };
+
+  const handleClosePopup = () => {
+    setPopupVisible(false);
+    setSelectedAsesoria(null);
+  };
+
+const handleAtencion = (codigoSeccion, index) => {
+  setAsesorias((prevAsesorias) => {
+    const newAsesorias = prevAsesorias.map((asesoria) => {
+      if (asesoria.seccion === codigoSeccion) {
+        const newReservas = asesoria.reservas.map((reserva, idx) => {
+          if (idx === index) {
+            return {
+              ...reserva,
+              atendido: true, // Cambio estático a true al hacer clic
+            };
+          }
+          return reserva;
+        });
+        return {
+          ...asesoria,
+          reservas: newReservas,
+        };
+      }
+      return asesoria;
+    });
+    return newAsesorias;
+  });
+};
+
 
   return (
     <div className="min-h-screen p-6">
@@ -92,45 +137,70 @@ export default function UserAsesores() {
         <h1 className="text-3xl font-bold text-gray-800 mb-8">
           Asesorías Programadas
         </h1>
-        <div className="grid grid-cols-2 gap-x-4 gap-y-6">
-          {asesorias.map((asesoria, index) => (
-            <div
-              key={index}
-              className="bg-white shadow-md rounded-lg px-6 py-5 border border-gray-300"
-            >
-              <h2 className="text-xl font-semibold text-center text-gray-700 mb-2">
-                {asesoria.curso} - {asesoria.seccion}
-              </h2>
-              <div className="flex items-center">
-                <div className="w-1/3">
-                  <p className="text-gray-600">
-                    <span className="font-medium">Fecha:</span> {asesoria.fecha}
-                  </p>
-                  <p className="text-gray-600">
-                    <span className="font-medium">Hora:</span> {asesoria.hora}
-                  </p>
-                  <p className="text-gray-600">
-                    <span className="font-medium">Ambiente:</span>{" "}
-                    {asesoria.ambiente}
-                  </p>
+        <div>
+          {asesorias.length === 0 ? (
+            <p className="text-gray-500 font-bold text-xl">
+              No se tienen asesorías registradas
+            </p>
+          ) : (
+            <div className="grid grid-cols-3 gap-x-4 gap-y-6">
+              {asesorias.map((asesoria, index) => (
+                <div
+                  key={index}
+                  className="bg-white shadow-md rounded-lg px-5 py-4 border border-gray-300"
+                >
+                  <h2
+                    className="text-lg font-semibold text-center text-gray-700 pb-1 mb-2 border-b hover:bg-gray-100 cursor-pointer border-gray-300"
+                    onClick={() => handleAsesoriaClick(asesoria)}
+                  >
+                    {asesoria.curso} - {asesoria.seccion}
+                  </h2>
+                  <div className="grid justify-items-center">
+                    <ul className="bg-white rounded-lg">
+                      {asesoria.reservas.map((reserva, index) => (
+                        <li
+                          key={index}
+                          className={`flex items-center py-3 px-4 hover:bg-gray-100 cursor-pointer ${
+                            reserva.atendido
+                              ? "border-green-500"
+                              : "border-red-500"
+                          } border-4 rounded-lg`}
+                          onClick={() => handleAtencion(asesoria, index)}
+                        >
+                          <div className="flex-shrink-0">
+                            <img
+                              src={reserva.foto}
+                              alt={reserva.nombre}
+                              className="h-12 w-12 rounded-full object-cover border border-gray-300"
+                            />
+                          </div>
+                          <div className="ml-4">
+                            <p className="text-gray-800 font-semibold">
+                              {reserva.orden}. {reserva.nombre}
+                            </p>
+                            <p className="text-gray-600 text-sm">
+                              Tiempo estimado:{" "}
+                              {Math.floor(60 / asesoria.reservas.length)}{" "}
+                              minutos
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-                <div className="w-2/3">
-                  <h3 className="text-xl font-semibold text-gray-700 mt-1">
-                    Reservas:
-                  </h3>
-                  <ul className="list-disc list-inside ml-4">
-                    {asesoria.reservas.map((reserva, index) => (
-                      <li key={index} className="text-gray-600">
-                        {reserva.orden}. {reserva.nombre}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
       </div>
+      {selectedAsesoria && (
+        <PopupAsesorias
+          isVisible={isPopupVisible}
+          onClose={handleClosePopup}
+          asesoria={selectedAsesoria}
+        />
+      )}
     </div>
   );
 }
