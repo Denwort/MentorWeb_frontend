@@ -77,7 +77,7 @@ export default function DashboardLayout({ children }) {
           <span className="truncate">Eliminar asesoria</span>
         </div>
         <div
-                onClick={() => handleNavigation("/estudiante/perfil")}
+                onClick={() => handleNavigation("/profesor/perfil")}
                 className={`cursor-pointer flex items-center py-2 px-4 ${activePage === "/profesor/perfil" ? "bg-orange-500 text-white rounded-r-full" : "text-black hover:bg-orange-500 hover:text-white hover:rounded-r-full"}`}
             >
                 <Image src={perfil} alt="Icono" className="h-6 w-6 mr-2" />

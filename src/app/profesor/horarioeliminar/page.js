@@ -111,12 +111,12 @@ export default function horarioExtraEliminar() {
 
   const mostrar = () => {
     if(asesorias.length == 0){
-      setMostrarPrincipal(false);
-      setmostrarNoAsesorias(true);
-    }
-    else{
       setMostrarPrincipal(true);
       setmostrarNoAsesorias(false);
+    }
+    else{
+      setMostrarPrincipal(false);
+      setmostrarNoAsesorias(true);
     }
   };
 
