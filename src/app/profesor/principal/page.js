@@ -33,34 +33,43 @@ export default function UserAsesores() {
   };
 
   // Función para transformar cada asesoría
-  const transformarAsesoria = (objeto) => {
-    const primeraAsesoria =
-      objeto.asesorias.length > 0 ? objeto.asesorias[0] : null;
+   const transformarAsesoria = (objeto) => {
+     return objeto.asesorias.map((asesoria) => {
+       const fechaFormateada = formatearFecha(asesoria.fecha_inicio);
+       const horaInicioFormateada = formatearHora(asesoria.fecha_inicio);
+       const horaFinFormateada = formatearHora(asesoria.fecha_fin);
 
-    if (!primeraAsesoria) {
-      return null;
-    }
+       return {
+         fecha: fechaFormateada,
+         hora_inicio: horaInicioFormateada,
+         hora_fin: horaFinFormateada,
+         curso: objeto.curso.nombre,
+         ambiente: asesoria.ambiente,
+         seccion: objeto.codigo,
+         reservas: asesoria.reservas.map((reserva, index) => ({
+           codigo: reserva.codigo,
+           nombre: reserva.estudiante.nombres,
+           foto: reserva.estudiante.foto,
+           atendido: false,
+           orden: index + 1,
+         })),
+       };
+     });
+   };
 
-    const fechaFormateada = formatearFecha(primeraAsesoria.fecha_inicio);
-    const horaInicioFormateada = formatearHora(primeraAsesoria.fecha_inicio);
-    const horaFinFormateada = formatearHora(primeraAsesoria.fecha_fin);
+   // Función para filtrar asesorías de la semana
+   const filtrarAsesoriasSemana = (asesorias) => {
+     const hoy = new Date();
+     const semanaDespues = new Date();
+     semanaDespues.setDate(hoy.getDate() + 7);
 
-    return {
-      fecha: fechaFormateada,
-      hora_inicio: horaInicioFormateada,
-      hora_fin: horaFinFormateada,
-      curso: objeto.curso.nombre,
-      ambiente: primeraAsesoria.ambiente,
-      seccion: objeto.codigo,
-      reservas: primeraAsesoria.reservas.map((reserva, index) => ({
-        codigo: reserva.codigo,
-        nombre: reserva.estudiante.nombres,
-        foto: reserva.estudiante.foto,
-        atendido: false,
-        orden: index + 1,
-      })),
-    };
-  };
+     return asesorias.filter((asesoria) => {
+       const fechaAsesoria = new Date(
+         asesoria.fecha.split("/").reverse().join("-")
+       );
+       return fechaAsesoria >= hoy && fechaAsesoria <= semanaDespues;
+     });
+   };
 
   // Función principal para manejar la consulta
   const handleConsulta = async () => {
@@ -75,11 +84,13 @@ export default function UserAsesores() {
       });
 
       const dataLimpia = asesoresData
-        .map(transformarAsesoria)
+        .flatMap(transformarAsesoria)
         .filter((item) => item !== null);
 
-      setAsesorias(dataLimpia);
-      console.log(dataLimpia);
+      const asesoriasSemana = filtrarAsesoriasSemana(dataLimpia);
+
+      setAsesorias(asesoriasSemana);
+      console.log(asesoriasSemana);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -143,7 +154,7 @@ const handleAtencion = (codigoSeccion, index) => {
               No se tienen asesorías registradas
             </p>
           ) : (
-            <div className="grid grid-cols-3 gap-x-4 gap-y-6">
+             <div className="grid grid-cols-3 gap-x-4 gap-y-6">
               {asesorias.map((asesoria, index) => (
                 <div
                   key={index}
@@ -165,7 +176,7 @@ const handleAtencion = (codigoSeccion, index) => {
                               ? "border-green-500"
                               : "border-red-500"
                           } border-4 rounded-lg`}
-                          onClick={() => handleAtencion(asesoria, index)}
+                          onClick={() => handleAtencion(asesoria.seccion, index)}
                         >
                           <div className="flex-shrink-0">
                             <img
