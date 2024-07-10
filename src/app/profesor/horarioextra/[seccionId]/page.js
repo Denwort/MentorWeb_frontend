@@ -50,11 +50,13 @@ const AgregarHorario = () => {
         alert("El enlace de Zoom debe ser creado por una cuenta ULima"); 
         return; 
     }
+    
 
     if (!isValidAmbiente(ambiente)) { 
         alert("Caracteres no válidos en el campo Ambiente"); 
         return; 
     }
+    
 
     try { 
         const response = await fetch('http://127.0.0.1:8000/abrir_extra/', { 
@@ -108,6 +110,8 @@ const AgregarHorario = () => {
   const isValidDate = (date, startCycle1, endCycle1, startCycle2, endCycle2) => {
     return (date >= startCycle1 && date <= endCycle1) || (date >= startCycle2 && date <= endCycle2);
   };
+  const isValidLink = (enlace)=>{return true};
+  const isValidAmbiente = (ambiente)=>{return true}
 
   const handleAmbienteChange = (e) => {
     setAmbiente(e.target.value);

@@ -80,6 +80,7 @@ export default function horarioExtraEliminar() {
 
       setAsesorias(dataLimpia);
       console.log(dataLimpia);
+      mostrar(dataLimpia);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -89,7 +90,7 @@ export default function horarioExtraEliminar() {
   const eliminarAsesoria = async (index) => {
     if (window.confirm("¿Estás seguro de que deseas eliminar esta asesoría?")) {
       console.log(index);
-    const response = await fetch('http://127.0.0.1:8000/cerrar_extra/', {
+      const response = await fetch('http://127.0.0.1:8000/cerrar_extra/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -99,24 +100,25 @@ export default function horarioExtraEliminar() {
         }),
       });
       alert("La asesoría ha sido eliminada exitosamente.");
+      await handleConsulta();
     }
-    handleConsulta();
-    mostrar();
+    
   };
 
   useEffect(() => {
     handleConsulta();
-    mostrar();
   }, []);
 
-  const mostrar = () => {
-    if(asesorias.length == 0){
-      setMostrarPrincipal(true);
-      setmostrarNoAsesorias(false);
-    }
-    else{
+  const mostrar = (misasesorias) => {
+    if(misasesorias.length == 0){
+      console.log("sin asesorias")
       setMostrarPrincipal(false);
       setmostrarNoAsesorias(true);
+    }
+    else{
+      console.log("con asesorias")
+      setMostrarPrincipal(true);
+      setmostrarNoAsesorias(false);
     }
   };
 
