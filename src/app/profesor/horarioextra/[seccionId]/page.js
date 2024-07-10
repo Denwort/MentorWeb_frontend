@@ -18,6 +18,47 @@ const AgregarHorario = () => {
     const fechaHoraInicio = `${fechaInicio}T${horaInicio}:00Z`;
     const fechaHoraFin = `${fechaFin}T${horaFin}:00Z`;
 
+    if (!fechaInicio || !horaInicio || !horaFin || !ambiente || !enlace) {
+      alert('Rellenar campos vacíos');
+      return;
+    }
+
+    if (new Date(fechaHoraInicio) < new Date()) {
+      alert('La fecha y hora de inicio deben ser posteriores a la fecha y hora actuales');
+      return;
+    }
+
+    if (new Date(fechaHoraFin) <= new Date(fechaHoraInicio)) {
+      alert('La hora de fin debe ser mayor a la hora de inicio');
+      return;
+    }
+
+    const fechaInicioDate = new Date(fechaInicio);
+    const startAcademicCycle1 = new Date('2024-04-01');
+    const endAcademicCycle1 = new Date('2024-08-05');
+    const startAcademicCycle2 = new Date('2024-08-15');
+    const endAcademicCycle2 = new Date('2024-12-15');
+
+    if (!(
+        (fechaInicioDate >= startAcademicCycle1 && fechaInicioDate <= endAcademicCycle1) ||
+        (fechaInicioDate >= startAcademicCycle2 && fechaInicioDate <= endAcademicCycle2)
+      )) {
+      alert('Ingresa fechas dentro del ciclo académico');
+      return;
+    }
+
+    const ulimaZoomPattern = /^https:\/\/ulima-edu-pe\.zoom\.us\/j\/\d+$/;
+    if (!ulimaZoomPattern.test(enlace)) {
+      alert('El enlace de Zoom debe ser creado por una cuenta ULima');
+      return;
+    }
+
+    const ambientePattern = /^[a-zA-Z0-9-]+$/;
+    if (!ambientePattern.test(ambiente)) {
+      alert('Caracteres no válidos en el campo Ambiente');
+      return;
+    }
+
     console.log({
       seccion_id: seccionId,
       fecha_inicio: fechaHoraInicio,
@@ -56,8 +97,10 @@ const AgregarHorario = () => {
   };
 
   const handleFechaInicioChange = (e) => {
-    setFechaInicio(e.target.value);
-    const fechaHoraInicio = `${e.target.value}T${horaInicio}:00Z`;
+    const newFechaInicio = e.target.value;
+    setFechaInicio(newFechaInicio);
+    setFechaFin(newFechaInicio); // Set fechaFin the same as fechaInicio
+    const fechaHoraInicio = `${newFechaInicio}T${horaInicio}:00Z`;
     console.log("Fecha y Hora de Inicio:", fechaHoraInicio);
   };
 
@@ -65,12 +108,6 @@ const AgregarHorario = () => {
     setHoraInicio(e.target.value);
     const fechaHoraInicio = `${fechaInicio}T${e.target.value}:00Z`;
     console.log("Fecha y Hora de Inicio:", fechaHoraInicio);
-  };
-
-  const handleFechaFinChange = (e) => {
-    setFechaFin(e.target.value);
-    const fechaHoraFin = `${e.target.value}T${horaFin}:00Z`;
-    console.log("Fecha y Hora de Fin:", fechaHoraFin);
   };
 
   const handleHoraFinChange = (e) => {
@@ -100,6 +137,7 @@ const AgregarHorario = () => {
             value={fechaInicio}
             onChange={handleFechaInicioChange}
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            min={new Date().toISOString().split('T')[0]} // Restricción de fecha mínima
           />
           <label className="block mb-2 text-gray-700">Hora de Inicio:</label>
           <input
@@ -114,8 +152,8 @@ const AgregarHorario = () => {
           <input
             type="date"
             value={fechaFin}
-            onChange={handleFechaFinChange}
-            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            disabled
+            className="w-full p-3 border border-gray-300 rounded-md bg-gray-100"
           />
           <label className="block mb-2 text-gray-700">Hora de Fin:</label>
           <input
