@@ -24,8 +24,21 @@ export default function UploadPage({ children }) {
   const estudiante_id = cuenta.persona.id;
 
   useEffect(() => {
-    handleObtenerPeriodos();
-    handleObtenerCursos();
+    const obtenerDatos = async () => {
+      const periodosResponse = await handleObtenerPeriodos();
+      if (!periodosResponse.ok) {
+        console.error('Error en la carga de periodos');
+        return;
+      }
+
+      const cursosResponse = await handleObtenerCursos();
+      if (!cursosResponse.ok) {
+        console.error('Error en la carga de cursos');
+        return;
+      }
+    };
+
+    obtenerDatos();
   }, []);
 
   const handleObtenerPeriodos = async () => {
@@ -37,12 +50,15 @@ export default function UploadPage({ children }) {
       if (response.ok) {
         const data = await response.json();
         setPeriodos(data);
+        return { ok: true };
       } else {
         const error = await response.text();
         alert('Error en la carga de periodos: ' + (error.length < 100 ? error : 'Error'));
+        return { ok: false };
       }
     } catch (error) {
       console.error('Error: ', error);
+      return { ok: false };
     }
   };
 
@@ -55,12 +71,15 @@ export default function UploadPage({ children }) {
       if (response.ok) {
         const data = await response.json();
         setCursos(data);
+        return { ok: true };
       } else {
         const error = await response.text();
         alert('Error en la carga de cursos: ' + (error.length < 100 ? error : 'Error'));
+        return { ok: false };
       }
     } catch (error) {
       console.error('Error: ', error);
+      return { ok: false };
     }
   };
 
@@ -90,6 +109,55 @@ export default function UploadPage({ children }) {
   const handleCrearTicket = async (CT) => {
     CT.preventDefault();
     setIsSubmitting(true);
+
+    // Validaciones específicas
+    if (!periodo) {
+      alert('Selecciona un periodo');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!curso) {
+      alert('Selecciona un curso');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!seccion) {
+      alert('Selecciona una sección');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!asunto) {
+      alert('El campo Asunto no puede estar vacío');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!comentario) {
+      alert('El campo Comentario no puede estar vacío');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!descripcion) {
+      alert('El campo Descripción no puede estar vacío');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!archivo) {
+      alert('Debe seleccionar un archivo');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (fileType !== 'application/pdf') {
+      alert('El archivo debe ser en formato PDF');
+      setIsSubmitting(false);
+      return;
+    }
 
     const formData = new FormData();
     formData.append('estudiante_id', estudiante_id);
