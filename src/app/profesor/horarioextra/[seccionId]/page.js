@@ -15,86 +15,75 @@ const AgregarHorario = () => {
   const [enlace, setEnlace] = useState('');
 
   const handleAgregar = async () => {
-    const fechaHoraInicio = `${fechaInicio}T${horaInicio}:00Z`;
-    const fechaHoraFin = `${fechaFin}T${horaFin}:00Z`;
-
-    if (!fechaInicio || !horaInicio || !horaFin || !ambiente || !enlace) {
-      alert('Rellenar campos vacíos');
-      return;
+    if (!fechaInicio || !horaInicio || !ambiente || !enlace) { 
+        alert("Rellenar campos vacíos"); 
+        return; 
     }
 
-    if (new Date(fechaHoraInicio) < new Date()) {
-      alert('La fecha y hora de inicio deben ser posteriores a la fecha y hora actuales');
-      return;
+    const fechaInicioDate = new Date(fechaInicio); 
+    const fechaHoraInicio = `${fechaInicio}T${horaInicio}:00Z`; 
+    const fechaHoraFin = `${fechaInicio}T${horaFin}:00Z`; 
+    const startAcademicCycle1 = new Date('2024-04-01'); 
+    const endAcademicCycle1 = new Date('2024-08-05'); 
+    const startAcademicCycle2 = new Date('2024-08-15'); 
+    const endAcademicCycle2 = new Date('2024-12-15'); 
+
+    const horaInicioDate = new Date(`${fechaInicio}T${horaInicio}:00Z`); 
+    const horaInicioHour = horaInicioDate.getUTCHours(); 
+
+    if (!isValidDate(fechaInicioDate, startAcademicCycle1, endAcademicCycle1, startAcademicCycle2, endAcademicCycle2)) { 
+        alert("Ingresa fechas dentro del ciclo académico"); 
+        return; 
     }
 
-    if (new Date(fechaHoraFin) <= new Date(fechaHoraInicio)) {
-      alert('La hora de fin debe ser mayor a la hora de inicio');
-      return;
+    if (horaInicioHour < 7 || horaInicioHour > 21) { 
+        alert("La hora de inicio debe estar entre las 7:00 y las 21:00"); 
+        return; 
     }
 
-    const fechaInicioDate = new Date(fechaInicio);
-    const startAcademicCycle1 = new Date('2024-04-01');
-    const endAcademicCycle1 = new Date('2024-08-05');
-    const startAcademicCycle2 = new Date('2024-08-15');
-    const endAcademicCycle2 = new Date('2024-12-15');
-
-    if (!(
-        (fechaInicioDate >= startAcademicCycle1 && fechaInicioDate <= endAcademicCycle1) ||
-        (fechaInicioDate >= startAcademicCycle2 && fechaInicioDate <= endAcademicCycle2)
-      )) {
-      alert('Ingresa fechas dentro del ciclo académico');
-      return;
+    if (new Date(fechaHoraInicio) >= new Date(fechaHoraFin)) { 
+        alert("La hora de fin debe ser mayor a la hora de inicio"); 
+        return; 
     }
 
-    const ulimaZoomPattern = /^https:\/\/ulima-edu-pe\.zoom\.us\/j\/\d+$/;
-    if (!ulimaZoomPattern.test(enlace)) {
-      alert('El enlace de Zoom debe ser creado por una cuenta ULima');
-      return;
+    if (!isValidLink(enlace)) { 
+        alert("El enlace de Zoom debe ser creado por una cuenta ULima"); 
+        return; 
     }
 
-    const ambientePattern = /^[a-zA-Z0-9-]+$/;
-    if (!ambientePattern.test(ambiente)) {
-      alert('Caracteres no válidos en el campo Ambiente');
-      return;
+    if (!isValidAmbiente(ambiente)) { 
+        alert("Caracteres no válidos en el campo Ambiente"); 
+        return; 
     }
 
-    console.log({
-      seccion_id: seccionId,
-      fecha_inicio: fechaHoraInicio,
-      fecha_fin: fechaHoraFin,
-      ambiente,
-      enlace,
-    });
+    try { 
+        const response = await fetch('http://127.0.0.1:8000/abrir_extra/', { 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                seccion_id: seccionId,
+                fecha_inicio: fechaHoraInicio,
+                fecha_fin: fechaHoraFin,
+                ambiente,
+                enlace,
+            }),
+        });
 
-    try {
-      const response = await fetch('http://127.0.0.1:8000/abrir_extra/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          seccion_id: seccionId,
-          fecha_inicio: fechaHoraInicio,
-          fecha_fin: fechaHoraFin,
-          ambiente,
-          enlace,
-        }),
-      });
-
-      if (response.ok) {
-        alert('Horario agregado exitosamente');
-        router.push('/profesor/principal');
-        console.log("Data enviada: ", response);
-      } else {
-        const error = await response.text();
-        alert('Error al agregar horario: ' + error);
-      }
-    } catch (error) {
-      console.error('Error al agregar horario:', error);
-      alert('Error al agregar horario');
+        if (response.ok) { 
+            alert('Horario agregado exitosamente'); 
+            router.push('/profesor/principal'); 
+        } else {
+            const error = await response.text();
+            alert('Error al agregar horario: ' + error); 
+        }
+    } catch (error) { 
+        console.error('Error al agregar horario:', error);
+        alert('Error al agregar horario'); 
     }
-  };
+}; 
+
 
   const handleFechaInicioChange = (e) => {
     const newFechaInicio = e.target.value;
@@ -114,6 +103,10 @@ const AgregarHorario = () => {
     setHoraFin(e.target.value);
     const fechaHoraFin = `${fechaFin}T${e.target.value}:00Z`;
     console.log("Fecha y Hora de Fin:", fechaHoraFin);
+  };
+
+  const isValidDate = (date, startCycle1, endCycle1, startCycle2, endCycle2) => {
+    return (date >= startCycle1 && date <= endCycle1) || (date >= startCycle2 && date <= endCycle2);
   };
 
   const handleAmbienteChange = (e) => {
