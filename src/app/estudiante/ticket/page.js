@@ -151,13 +151,7 @@ export default function UploadPage({ children }) {
       alert('Debe seleccionar un archivo');
       setIsSubmitting(false);
       return;
-    }
-
-    if (fileType !== 'application/pdf') {
-      alert('El archivo debe ser en formato PDF');
-      setIsSubmitting(false);
-      return;
-    }
+    } 
 
     const formData = new FormData();
     formData.append('estudiante_id', estudiante_id);

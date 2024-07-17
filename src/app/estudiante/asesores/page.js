@@ -152,7 +152,6 @@ export default function UserAsesores() {
           {criterio === "keyword" && (
             <div className="relative w-7/12 mb-4">
               <div className="absolute inset-y-0 left-0 grid content-center pl-3 pointer-events-none h-full">
-                <Image src={busqueda} alt="Icono" className="h-6 w-6" />
               </div>
 
               <input
@@ -168,7 +167,7 @@ export default function UserAsesores() {
           {criterio === "curso" && (
             <div className="relative w-7/12 mb-4">
               <div className="absolute inset-y-0 left-0 grid content-center pl-3 pointer-events-none h-full">
-                <Image src={busqueda} alt="Icono" className="h-6 w-6" />
+                
               </div>
               <input
                 className="w-full rounded-full border-2 border-orange-500 pl-10 py-2 focus:border-red-500"

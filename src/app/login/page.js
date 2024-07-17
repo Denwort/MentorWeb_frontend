@@ -10,6 +10,8 @@ export default function Home() {
   const { getCuenta, setCuenta } = useMiProvider();
   const router = useRouter();
 
+  
+
   const handleLogin = async () => {
     try {
       const response = await fetch('http://127.0.0.1:8000/login/', {
@@ -43,7 +45,12 @@ export default function Home() {
     } catch (error) {
       console.error('Error:', error);
     }
-
+  }
+  
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleLogin();
+    }
   }
 
   return (
@@ -52,7 +59,7 @@ export default function Home() {
             <div className="w-full"><h1 className="font-bold ">Login</h1></div>
 
         <div className="px-4 py-1 mt-2">
-          <form className="bg-white shadow-md ">
+          <form className="bg-white shadow-md " onKeyDown={handleKeyDown}>
 
             <div className="grid grid-row-4 px-48 py-32">
 
@@ -79,7 +86,7 @@ export default function Home() {
 
             <div className="flex items-center justify-center ">
               <div className='grid row-cols-2 gap-4'>
-                <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline text-center" type="button" onClick={handleLogin}>
+                <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-16 rounded-full focus:outline-none focus:shadow-outline text-center" type="button" onClick={handleLogin} >
                   Iniciar Sesión
                 </button>
                 
