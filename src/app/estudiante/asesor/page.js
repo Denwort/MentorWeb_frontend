@@ -14,13 +14,14 @@ export default function Home() {
 
     const handleConsulta = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:8000/profesor/', {
+            const response = await fetch('http://127.0.0.1:8000/profesorAsesoriasxd/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     "profesor_id": id,
+                    "estudiante_id":cuenta.persona.id,
                 }),
             });
 
@@ -62,7 +63,8 @@ export default function Home() {
                     fecha_fin: asesoria.fecha_fin,
                     curso: seccion.curso.nombre,
                     ambiente: asesoria.ambiente,
-                    enlace: asesoria.enlace
+                    enlace: asesoria.enlace,
+                    reservado: asesoria.reservas.length>0, 
                 };
                 listaAsesorias.push(infoAsesoria);
             });
@@ -109,6 +111,7 @@ export default function Home() {
             if (response.ok) {
                 const data = await response.json();
                 alert('Registro exitoso');
+                window.location.reload();
             } else {
                 const error = await response.text();
                 alert(error);
@@ -185,7 +188,7 @@ export default function Home() {
                   <tbody>
                     {obtenerAsesorias(asesor.secciones)
                       .filter((asesoria) => {
-                        const ahora = new Date();
+                        const ahora = new Date(new Date().getTime() - 5 * 60 * 60 * 1000);
                         const unaSemanaDespues = new Date();
                         unaSemanaDespues.setDate(ahora.getDate() + 7);
 
@@ -221,10 +224,14 @@ export default function Home() {
                           </td>
                           <td className="py-3 px-4 text-sm font-medium text-gray-900 flex items-center">
                             <button
-                              className="bg-green-500 hover:bg-green-700 text-white font-bold py-1.5 px-4 rounded-full mx-2 text-sm"
-                              onClick={() => handleReservar(asesoria.id)}
+                              className={`${
+                                asesoria.reservado ? 'bg-red-500' : 'bg-green-500 hover:bg-green-700'
+                              } text-white font-bold py-1.5 px-4 rounded-full mx-2 text-sm`}
+                              onClick={() => handleReservar(asesoria.id)
+                              }
+                              disabled={asesoria.reservado==true}
                             >
-                              Reservar
+                              {asesoria.reservado ? 'Ya Reservado' : 'Reservar'}
                             </button>
                             <div className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-1.5 px-4 rounded-full mx-2 text-sm">
                               <a
