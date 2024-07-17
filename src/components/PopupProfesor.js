@@ -95,10 +95,19 @@ const PopupForm = ({ isVisible, onClose, onSubmit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const { name, email, password, recoveryQuestion, recoveryAnswer } = formData;
+
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
     if (!name || !email || !password || !recoveryQuestion || !recoveryAnswer) {
       setError('Todos los campos excepto la foto son obligatorios.');
       return;
     }
+
+    if (!passwordRegex.test(password)) {
+      setError('La contraseña debe tener al menos 8 caracteres, una mayúscula, un carácter especial y un número.');
+      return;
+    }
+    
     setError(null);
     onSubmit(formData);
   };

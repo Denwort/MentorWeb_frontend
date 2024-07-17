@@ -106,6 +106,14 @@ export default function TicketEspecifico() {
     setShowAcceptForm(false);
   };
 
+  const handleCancelar = () => {
+    setComentario('');
+    setNombre('');
+    setDescripcion('');
+    setShowAcceptForm(false);
+    setShowRejectForm(false);
+  };
+
   const getFileName = (filePath) => {
     return filePath.split('/').pop();
   };
@@ -205,11 +213,12 @@ export default function TicketEspecifico() {
             )}
 
             {(ticket.estado !== 'Pendiente' || showAcceptForm || showRejectForm) && (
-              <Link href="/admin/tickets">
-                <button className="mt-4 py-2 px-4 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-300">
-                  Volver
-                </button>
-              </Link>
+              <button 
+                onClick={handleCancelar}
+                className="mt-4 py-2 px-4 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-300"
+              >
+                Cancelar
+              </button>
             )}
           </div>
         </div>

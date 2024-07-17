@@ -27,7 +27,6 @@ const obtenerAsesoriasEstudiante = async (id) => {
   }
 };
 
-
 const obtenerDocumentosRecientes = async (estudiante_id) => {
   try {
     const response = await fetch('http://127.0.0.1:8000/recientes/', {
@@ -87,6 +86,9 @@ const AsesoriasEstudianteCards = () => {
   }, [reload, estudiante_id]);
 
   const handleEliminarReservar = async (reserva_id) => {
+    if (!confirm("¿Estás seguro de que deseas eliminar esta reserva?")) {
+      return;
+    }
     try {
       const response = await fetch('http://127.0.0.1:8000/reservarEliminar/', {
         method: 'POST',
